@@ -1,0 +1,26 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='edit icon')
+					div(class='content') Edit Category
+						div(class='sub header') Edit existing category.
+				div(class='ui divider')
+				form(class='ui form' action='/categories/'+ category._id +'?_method=PUT' method='post')
+					div(class='field')
+						label(for='description') Description:
+						input(type='text' id='description' name='description' value=category.description)
+					div(class='field')
+						label(for='sequence') Sequence:
+						input(type='number' id='sequence' name='sequence' value=category.sequence)
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/categories')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer

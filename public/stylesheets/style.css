@@ -1,0 +1,33 @@
+.blog-summary {
+  margin-top: 20px;
+}
+
+.admin-menu {
+  margin-top: 20px;
+}
+
+.admin-segment:hover {
+  background-color: #fcfcfc;
+}
+
+.delete-button {
+  display: inline-block;
+}
+
+.submit-link {
+  background-color: transparent;
+  text-decoration: none;
+  border: none;
+  color: #4183c4;
+  cursor: pointer;
+}
+.submit-link:focus {
+  outline: none
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+}

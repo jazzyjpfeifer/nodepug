@@ -1,0 +1,28 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='plus circle icon')
+					div(class='content') Add New Author
+						div(class='sub header') Add new author form.
+				div(class='ui divider')
+				form(class='ui form' action='/authors' method='post')
+					div(class='field')
+						label(for='name') Full Name:
+						input(type='text' id='name' name='name')
+					div(class='field')
+						label(for='bio') Bio:
+						textarea(id='bio' name='bio')
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/authors')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

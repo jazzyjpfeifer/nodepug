@@ -1,0 +1,60 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='pencil icon')
+					div(class='content') Posts
+						div(class='sub header') Add, edit, and delete posts.
+				div(class='ui divider')
+				table(class='ui very basic table')
+					thead
+						tr
+							th Title
+							th Summary
+							th Author
+							th Category
+							th Date Posted
+							th Actions
+					tbody
+						each post in posts
+							tr
+								td #{post.title}
+								td #{post.summary.substr(0, 50) + '...'}
+								td #{post.author.name}
+								td #{post.category.description}
+								td #{post.date_posted_formatted}
+								td
+									form(class='ui form delete-button' action='/posts/' + post._id + '?_method=DELETE' method='post')
+										div(class='ui buttons')
+											a(class='ui primary basic button' href='/posts/' + post._id + '/show')
+												i(class='square plus icon')
+												span Details
+											a(class='ui primary basic button' href='/posts/' + post._id + '/edit')
+												i(class='edit icon')
+												span Edit
+											button(type='submit' class='ui primary basic button' Onclick='return ConfirmDelete()' value='Delete')
+												i(class='trash icon')
+												span Delete
+					tfoot(class='full-width')
+						tr
+							th
+								a(href='posts/new' class='ui primary button')
+									i(class='plus icon')
+									span Add New Post
+							th
+							th
+							th
+							th
+							th
+				div(class='ui hidden divider')
+				a(href='/admin')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

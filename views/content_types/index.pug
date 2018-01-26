@@ -1,0 +1,49 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='block layout icon')
+					div(class='content') Content Types
+						div(class='sub header') Add, edit, and delete content types.
+				div(class='ui divider')
+				table(class='ui very basic table')
+					thead
+						tr
+							th Name
+							th Sequence
+							th Actions
+					tbody
+						each content_type in content_types
+							tr
+								td #{content_type.description}
+								td #{content_type.sequence}
+								td
+									a(href='/content_types/' + content_type._id + '/edit')
+										i(class='edit icon')
+										span Edit
+									form(class='ui form delete-button' action='/content_types/' + content_type._id + '?_method=DELETE' method='post')
+										button(type='submit' class='submit-link' Onclick='return ConfirmDelete()' value='Delete')
+											| |
+											|
+											i(class='trash icon')
+											span Delete
+					tfoot(class='full-width')
+						tr
+							th
+								a(href='content_types/new' class='ui primary button')
+									i(class='plus icon')
+									span Add Content Type
+							th
+							th
+				div(class='ui hidden divider')
+				a(href='/admin')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

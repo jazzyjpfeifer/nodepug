@@ -1,0 +1,46 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='plus circle icon')
+					div(class='content') Add New Post
+						div(class='sub header') Add new post form.
+				div(class='ui divider')
+				form(class='ui form' action='/posts' method='post')
+					div(class='field')
+						label(for='title') Title:
+						input(type='text' id='title' name='title')
+					div(class='field')
+						label Author:
+						div(class='ui selection dropdown')
+							input(name='author' type='hidden')
+							i(class='dropdown icon')
+							div(class='default text') Select one...
+							div(class='menu')
+								each author in authors
+									div(class='item' data-value=author._id) #{author.name}
+					div(class='field')
+						label Category:
+						div(class='ui selection dropdown')
+							input(name='category' type='hidden')
+							i(class='dropdown icon')
+							div(class='default text') Select one...
+							div(class='menu')
+								each category in categories
+									div(class='item' data-value=category._id) #{category.description}
+					div(class='field')
+						label(for='summary') Summary:
+						textarea(id='summary' name='summary')
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/posts')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

@@ -1,0 +1,49 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='tags icon')
+					div(class='content') Categories
+						div(class='sub header') Add, edit, and delete categories.
+				div(class='ui divider')
+				table(class='ui very basic table')
+					thead
+						tr
+							th Name
+							th Sequence
+							th Actions
+					tbody
+						each category in categories
+							tr
+								td #{category.description}
+								td #{category.sequence}
+								td
+									a(href='/categories/' + category._id + '/edit')
+										i(class='edit icon')
+										span Edit
+									form(class='ui form delete-button' action='/categories/' + category._id + '?_method=DELETE' method='post')
+										button(type='submit' class='submit-link' Onclick='return ConfirmDelete()' value='Delete')
+											| |
+											|
+											i(class='trash icon')
+											span Delete
+					tfoot(class='full-width')
+						tr
+							th
+								a(href='categories/new' class='ui primary button')
+									i(class='plus icon')
+									span Add Categories
+							th
+							th
+				div(class='ui hidden divider')
+				a(href='/admin')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

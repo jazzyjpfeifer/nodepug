@@ -1,0 +1,28 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='plus circle icon')
+					div(class='content') Add New Category
+						div(class='sub header') Add new category form.
+				div(class='ui divider')
+				form(class='ui form' action='/categories' method='post')
+					div(class='field')
+						label(for='description') Description:
+						input(type='text' id='description' name='description')
+					div(class='field')
+						label(for='sequence') Sequence:
+						input(type='number' id='sequence' name='sequence' value=count + 1)
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/categories')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

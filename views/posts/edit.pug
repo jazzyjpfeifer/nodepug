@@ -1,0 +1,52 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='edit icon')
+					div(class='content') Edit Post
+						div(class='sub header') Edit post form.
+				div(class='ui divider')
+				form(class='ui form' action='/posts/'+ post._id +'?_method=PUT' method='post')
+					div(class='field')
+						label(for='title') Title:
+						input(type='text' id='title' name='title' value=post.title)
+					div(class='field')
+						label Author:
+						div(class='ui selection dropdown')
+							input(name='author' type='hidden' value=post.author._id)
+							i(class='dropdown icon')
+							div(class='text') #{post.author.name}
+							div(class='menu')
+								each author in authors
+									div(class='item' data-value=author._id) #{author.name}
+					div(class='field')
+						label Category:
+						div(class='ui selection dropdown')
+							input(name='category' type='hidden' value=post.category._id)
+							i(class='dropdown icon')
+							div(class='text') #{post.category.description}
+							div(class='menu')
+								each category in categories
+									div(class='item' data-value=category._id) #{category.description}
+					div(class='field')
+						label(for='summary') Summary:
+						textarea(id='summary' name='summary') #{post.summary}
+					div(class='field')
+						label(for='calendar') Date Posted:
+						div(class='ui calendar' id='calendar')
+							div(class='ui input left icon')
+								i(class='calendar icon')
+								input(type='text' placeholder='Date/Time' name='date_posted' value=post.date_posted_formatted)
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/posts')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
+
+

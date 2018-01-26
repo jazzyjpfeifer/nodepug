@@ -1,0 +1,57 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='square plus icon')
+					div(class='content') #{post.title}
+						div(class='sub header') by #{post.author.name}
+				div(class='ui divider')
+				table(class='ui very basic table')
+					thead
+						tr
+							th Content
+							th Content Type
+							th Author
+							th Category
+							th Date Posted
+							th Actions
+					tbody
+							tr
+								td
+								td
+								td
+								td
+								td
+								td
+									form(class='ui form delete-button' action='/posts/' + post._id + '?_method=DELETE' method='post')
+										div(class='ui tiny buttons')
+											a(class='ui primary basic button' href='/posts/' + post._id + '/show/post_details/new')
+												i(class='square plus icon')
+												span Details
+											a(class='ui primary basic button' href='/posts/' + post._id + '/edit')
+												i(class='edit icon')
+												span Edit
+											button(type='submit' class='ui primary basic button' Onclick='return ConfirmDelete()' value='Delete')
+												i(class='trash icon')
+												span Delete
+					tfoot(class='full-width')
+						tr
+							th
+								a(href='/posts/' + post._id + '/show/post_details/new' class='ui primary button')
+									i(class='plus icon')
+									span Add Post Details
+							th
+							th
+							th
+							th
+							th
+				div(class='ui hidden divider')
+				a(href='/posts')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
