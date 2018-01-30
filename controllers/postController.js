@@ -1,6 +1,8 @@
 const Post = require('../models/posts'),
       Category = require('../models/category'),
-      Author = require('../models/author');
+      Author = require('../models/author'),
+      Content_Type = require('../models/content_type');
+      Post_Details = require('../models/post_detail');
 
 const async = require('async');
 
@@ -61,18 +63,40 @@ exports.post_save = function (req, res) {
 };
 
 exports.post_show = function (req, res) {
-    Post.findById(req.params.id)
-        .populate('category')
-        .populate('author')
-        .exec(function(err, foundPost){
-            if(err){
-                console.log(err);
-            } else {
-                console.log(foundPost);
-                res.render('posts/show', {title: 'New Post', post: foundPost});
+    async.parallel({
+        post: function(callback) {
+            Post.
+            findById(req.params.id).
+            populate('author').
+            populate({
+                path: 'post_details',
+                    populate: {
+                        path: 'content_type'
+                        }
+                    }).
+                exec(callback)
+        },
+    }, function (err, results) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(results.post);
+            res.render('posts/show', {title: 'New Post', post: results.post});
+        }
+    })
+};
+
+        /*.populate({
+            path: 'post_detail',
+            model: 'Post',
+            populate: {
+                path: 'content_type',
+                model: 'Post_Detail'
             }
         })
-};
+        */
+        //.populate('category')
+        //.populate('author')
 
 exports.post_edit = function (req, res) {
     async.parallel({

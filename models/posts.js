@@ -7,6 +7,7 @@ const postSchema = new Schema({
       summary: String,
       author: { type: Schema.Types.ObjectId, ref: 'Author'},
       category: { type: Schema.Types.ObjectId, ref: 'Category'},
+      post_details: [{type: Schema.Types.ObjectId, ref: "Post_Detail"}],
       date_posted: { type: Date, default: Date.now }
 });
 

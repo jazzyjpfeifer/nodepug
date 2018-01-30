@@ -13,19 +13,18 @@ html
 				table(class='ui very basic table')
 					thead
 						tr
+							th Id
 							th Content
 							th Content Type
-							th Author
-							th Category
-							th Date Posted
-							th Actions
 					tbody
+						each post_detail in post.post_details
 							tr
-								td
-								td
-								td
-								td
-								td
+								td #{post_detail._id}
+								td #{post_detail.content}
+								td #{post_detail.content_type.description}
+								//td
+								//td
+								//td
 								td
 									form(class='ui form delete-button' action='/posts/' + post._id + '?_method=DELETE' method='post')
 										div(class='ui tiny buttons')
@@ -44,8 +43,6 @@ html
 								a(href='/posts/' + post._id + '/show/post_details/new' class='ui primary button')
 									i(class='plus icon')
 									span Add Post Details
-							th
-							th
 							th
 							th
 							th

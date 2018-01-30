@@ -10,12 +10,11 @@ html
 					div(class='content') Add Post Details
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
-				p #{post._id}
-				form(class='ui form' action='/posts/:id/post_details/show' method='post')
+				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' method='post')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')
-							input(name='content' type='hidden')
+							input(name='content_type' type='hidden')
 							i(class='dropdown icon')
 							div(class='default text') Select one...
 							div(class='menu')

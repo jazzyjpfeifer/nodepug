@@ -7,5 +7,5 @@ const content_typesSchema = new Schema({
 });
 
 
-module.exports = mongoose.model("Content_Types", content_typesSchema);
+module.exports = mongoose.model("Content_Type", content_typesSchema);
 

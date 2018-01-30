@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express'),
+      router = express.Router({mergeParams: true});
 
 // Require controller
 const post_detail_controller = require('../controllers/post_detailController');
