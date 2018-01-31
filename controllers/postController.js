@@ -70,8 +70,10 @@ exports.post_show = function (req, res) {
             populate('author').
             populate({
                 path: 'post_details',
+                mode: 'Post_Detail',
                     populate: {
-                        path: 'content_type'
+                        path: 'content_type',
+                        model: 'Content_Type'
                         }
                     }).
                 exec(callback)
@@ -80,23 +82,10 @@ exports.post_show = function (req, res) {
         if (err) {
             console.log(err)
         } else {
-            console.log(results.post);
             res.render('posts/show', {title: 'New Post', post: results.post});
         }
     })
 };
-
-        /*.populate({
-            path: 'post_detail',
-            model: 'Post',
-            populate: {
-                path: 'content_type',
-                model: 'Post_Detail'
-            }
-        })
-        */
-        //.populate('category')
-        //.populate('author')
 
 exports.post_edit = function (req, res) {
     async.parallel({

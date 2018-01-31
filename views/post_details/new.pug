@@ -11,10 +11,11 @@ html
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
 				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' method='post')
+					input(name='post_detail[post]' value=post._id type='hidden')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')
-							input(name='content_type' type='hidden')
+							input(name='post_detail[content_type]' type='hidden')
 							i(class='dropdown icon')
 							div(class='default text') Select one...
 							div(class='menu')
@@ -22,10 +23,11 @@ html
 									div(class='item' data-value=content_type._id) #{content_type.description}
 					div(class='field')
 						label(for='content') Content:
-						textarea(id='content' name='content' placeholder='Enter content here...')
+						textarea(id='content' name='post_detail[content]' placeholder='Enter content here...')
 					div(class='field')
 						label(for='sequence') Sequence:
-						input(type='number' id='sequence' name='sequence' value=count + 1)
+						input(type='number' id='sequence' name='post_detail[sequence]' value=count)
+						p #{count}
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
 				a(href='/posts')
