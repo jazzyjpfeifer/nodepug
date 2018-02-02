@@ -12,6 +12,7 @@ html
 				div(class='ui divider')
 				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' method='post')
 					input(name='post_detail[post]' value=post._id type='hidden')
+					input(name='post_detail[post_title]' value=post.title type='hidden')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')
@@ -26,8 +27,7 @@ html
 						textarea(id='content' name='post_detail[content]' placeholder='Enter content here...')
 					div(class='field')
 						label(for='sequence') Sequence:
-						input(type='number' id='sequence' name='post_detail[sequence]' value=count)
-						p #{count}
+						input(type='number' id='sequence' name='post_detail[sequence]')
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
 				a(href='/posts')

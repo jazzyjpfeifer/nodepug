@@ -4,6 +4,7 @@ const mongoose = require('mongoose'),
 const post_detailSchema = new Schema({
     content_type: { type: Schema.Types.ObjectId, ref: 'Content_Type'},
     post: { type: Schema.Types.ObjectId, ref: 'Post'},
+    post_title: String,
     content: String,
     file_path: String,
     sequence: Number
