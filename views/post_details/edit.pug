@@ -1,0 +1,36 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container')
+			div(class='ui container')
+				h2(class='ui header')
+					i(class='plus circle icon')
+					div(class='content') Add Post Details
+						div(class='sub header') Add post details form.
+				div(class='ui divider')
+				form(class='ui form' action='/posts/'+ post_detail.post._id +'/show/post_details/'+ post_detail._id +'?_method=PUT' method='post')
+					input(name='post_id' type='hidden' value=post_detail.post._id)
+					div(class='field')
+						label Content Type:
+						div(class='ui selection dropdown')
+							input(name='post_detail[content_type]' type='hidden' value=post_detail.content_type._id)
+							i(class='dropdown icon')
+							div(class='text') #{post_detail.content.description}
+							div(class='menu')
+								each content_type in content_types
+									div(class='item' data-value=content_type._id) #{content_type.description}
+					div(class='field')
+						label(for='content') Content:
+						textarea(id='content' name='post_detail[content]') #{post_detail.content}
+					div(class='field')
+						label(for='sequence') Sequence:
+						input(type='number' id='sequence' name='post_detail[sequence]' value=post_detail.sequence)
+					button(class='ui primary button' type='submit') Save
+				div(class='ui hidden divider')
+				a(href='/posts/'+ post_detail.post._id + '/show')
+					i(class='arrow circle left icon')
+					span Back
+		include ../includes/scripts
+		include ../includes/footer
