@@ -21,14 +21,14 @@ html
 						each post_detail in post.post_details
 							tr
 								td #{post_detail.sequence}
-								td #{post_detail.content}
+								if post_detail.content.length < 90
+									td #{post_detail.content}
+								else
+									td #{post_detail.content.substr(0, 90) + '...'}
 								td #{post_detail.content_type.description}
 								td
 									form(class='ui form delete-button' action='/posts/' + post._id + '?_method=DELETE' method='post')
-										div(class='ui tiny buttons')
-											a(class='ui primary basic button' href='/posts/' + post._id + '/show/post_details/new')
-												i(class='square plus icon')
-												span Details
+										div(class='ui buttons')
 											a(class='ui primary basic button' href='/posts/' + post._id + '/show/post_details/' + post_detail._id + '/edit')
 												i(class='edit icon')
 												span Edit

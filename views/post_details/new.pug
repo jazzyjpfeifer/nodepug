@@ -3,6 +3,7 @@ html
 	include ../includes/head
 	body
 		include ../includes/header
+	each c in count
 		div(class='ui grid container')
 			div(class='ui container')
 				h2(class='ui header')
@@ -10,7 +11,7 @@ html
 					div(class='content') Add Post Details
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
-				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' method='post')
+				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' enctype='multipart/form-data' method='post')
 					input(name='post_detail[post]' value=post._id type='hidden')
 					input(name='post_detail[post_title]' value=post.title type='hidden')
 					div(class='field')
@@ -27,10 +28,13 @@ html
 						textarea(id='content' name='post_detail[content]' placeholder='Enter content here...')
 					div(class='field')
 						label(for='sequence') Sequence:
-						input(type='number' id='sequence' name='post_detail[sequence]')
+						input(type='number' id='sequence' name='post_detail[sequence]' value=c.count + 1)
+					div(class='field')
+						label(for='file') Upload Image:
+						input(type='file' id='file' name='file' multiple)
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
-				a(href='/posts')
+				a(href='/posts/' + post._id + '/show')
 					i(class='arrow circle left icon')
 					span Back
 		include ../includes/scripts

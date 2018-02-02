@@ -2,8 +2,13 @@ const Post = require('../models/posts'),
       Post_Detail = require('../models/post_detail'),
       Content_Type = require('../models/content_type');
 
+const formidable = require('formidable'),
+      path = require('path'),
+      uploadDir = path.join(__dirname, '/..', '/public/', '/images/');
+
 const express = require('express'),
-      router = express.Router({mergeParams: true});
+      router = express.Router({mergeParams: true}),
+      mongoose = require('mongoose');
 
 const async = require('async');
 
@@ -20,7 +25,13 @@ exports.post_detail_new = function (req, res) {
             exec(callback)
         },
         count: function (callback) {
-        Post_Details.find({}).count().
+        Post.aggregate([
+            {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+            {$unwind: '$post_details'},
+            {$group: {
+                _id: '$_id', count: { $sum: 1}
+                }}
+        ]).
             exec(callback)
         }
     }, function (err, results) {
@@ -28,36 +39,58 @@ exports.post_detail_new = function (req, res) {
             console.log(err);
         }
         else {
-            console.log(results.count);
             res.render('post_details/new', {title: 'Add Post Detail', post: results.post, content_types: results.content_types, count: results.count});
         }
     })
 };
 
 exports.post_detail_save = function (req, res) {
+    const form = new formidable.IncomingForm();
+    form.multiples = false;
+    form.keepExtensions = true;
+    form.uploadDir = uploadDir;
+
+
     Post.findById(req.params.id, function(err, post){
         if(err){
             console.log(err);
-            res.redirect("/posts");
         } else {
+            var form_date = req.body.post_detail;
+            console.log(form_date);
             Post_Detail.create(req.body.post_detail, function(err, post_detail){
                 if(err){
-                    //req.flash("error", "Something went wrong");
                     console.log(err);
                 } else {
-                    console.log('Body Parser = ' + req.body.post_detail);
-                    //save comment
-                    post_detail.save();
-                    post.post_details.push(post_detail._id);
-                    post.save();
-                    console.log(post_detail);
-                    //req.flash("success", "Successfully added comment");
-                    res.redirect('/posts/' + post._id + '/show');
+
+                    //processing upload
+                    form.parse(req, (err, fields, files) => {
+                        if (err) return res.status(500).json({ error: err });
+                    });
+                    form.on('progress', function (bytesReceived, bytesExpected) {
+                        const percent_complete = (bytesReceived / bytesExpected) * 100;
+                        console.log('Percent ' + percent_complete.toFixed(2));
+                    });
+                    form.on('error', function (err) {
+                        console.error(err);
+                    });
+                    form.on('fileBegin', function (name, file) {
+                        const [fileName, fileExt] = file.name.split('.');
+                        file.path = path.join(uploadDir, `${fileName}_${new Date().getTime()}.${fileExt}`);
+                        console.log(file.name);
+                    });
+
+
+                   //saving comment
+                    //post_detail.save();
+                    //post.post_details.push(post_detail._id);
+                    //post.save();
+                    res.redirect('/posts/' + post.id + '/show');
                 }
             });
         }
     });
 };
+
 
 exports.post_detail_edit = function (req, res) {
     async.parallel({

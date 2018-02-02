@@ -9,6 +9,10 @@ router.get('/', main_controller.index);
 
 router.get('/admin', main_controller.admin);
 
+router.get('/upload', main_controller.upload);
+
+router.post('/upload', main_controller.process);
+
 
 
 module.exports = router;
