@@ -1,19 +1,25 @@
 header
-  div(class='ui container')
-    div(class='ui text huge stackable menu')
-      div(class='header item')
-        a(href='/') BI STEPS.COM
-      a(class='item' href='/') Home
-      a(class='item' href='/') About
-      a(class='item' href='/') Contact
-      a(class='item' href='/') More Stuff..
-      a(class='item' href='/') Sign In
-      a(class='item' href='/admin') Admin
-      div(class='right item')
-      form(class='ui form ' action='/search' method='post')
-        div(class='ui action input')
-          input(type='text' placeholder='Search...' name='text_search')
-          button(class='ui blue icon button')
-            i(class='search icon')
-
-  div(class='ui hidden divider')
+	div(class='ui container')
+		div(class='ui stackable secondary menu')
+			div(class='header item')
+				a(href='/') BI STEPS.COM
+			a(class='item' href='/') Home
+			a(class='item' href='/') About
+			a(class='item' href='/') Contact
+			a(class='item' href='/') More Stuff..
+				a(class='item' href='/register') Sign Up
+				a(class='item' href='/register/login') Login
+				a(class='item' href='/register/logout') Logout
+			div(class='right menu')
+					div(class='ui action icon input')
+					form(class='ui form item' action='/search' method='post')
+						input(type='text' placeholder='Search...' name='text_search')
+			if(!currentUser)
+				//div(class='item')
+					a(class='ui primary button' href='/register') Sign Up
+				div(class='item')
+					a(class='ui primary button' href='/register/login') Log In
+			else
+				div(class='item')
+					a(class='ui primary button' href='/register/logout') Log Out
+	div(class='ui hidden divider')

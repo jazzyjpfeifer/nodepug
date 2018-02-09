@@ -1,5 +1,6 @@
 const Category = require('../models/category'),
-      Post = require('../models/posts');
+      Post = require('../models/posts'),
+      passport = require('passport');
 
 const async = require('async');
 
@@ -34,8 +35,8 @@ exports.index = function (req, res) {
         if(err) {
             console.log(err)
         } else {
-            console.log(results.archives);
-            res.render('index', { title: 'BI-Steps.com', categories: results.categories, posts: results.posts, archives: results.archives});
+            console.log(req.user);
+            res.render('index', { title: 'BI-Steps.com', categories: results.categories, posts: results.posts, archives: results.archives, currentUser: req.user});
         }
     })
 };

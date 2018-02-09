@@ -1,0 +1,21 @@
+doctype html
+html
+	include ../includes/head
+	body
+		include ../includes/header
+		div(class='ui grid container content')
+			div(class='eleven wide column')
+				h3(class='ui header') Login In
+				form(class='ui form' action='/register/login' method='post')
+					div(class='field')
+						div(class='ui left icon input')
+							i(class='user icon')
+							input(type='text' name='username' placeholder='User Name')
+					div(class='field')
+						div(class='ui left icon input')
+							i(class='lock icon')
+							input(type='password' name='password' placeholder='Password')
+					button(class='ui large blue submit button') Login
+		div(class='push')
+		include ../includes/scripts
+		include ../includes/footer

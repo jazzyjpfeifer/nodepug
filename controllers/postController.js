@@ -2,7 +2,6 @@ const Post = require('../models/posts'),
       Category = require('../models/category'),
       Author = require('../models/author'),
       Content_Type = require('../models/content_type');
-      Post_Details = require('../models/post_detail');
 
 const async = require('async');
 
