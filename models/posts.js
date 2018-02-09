@@ -17,6 +17,8 @@ postSchema
         return moment(this.date_posted).format('MMMM Do, YYYY');
     });
 
+postSchema.index({title: 'text', summary: 'text'});
+
 
 
 module.exports = mongoose.model("Post", postSchema);

@@ -3,7 +3,7 @@ html
 	include ../includes/head
 	body
 		include ../includes/header
-		div(class='ui grid container')
+		div(class='ui grid container content')
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='pencil icon')
@@ -23,7 +23,7 @@ html
 						each post in posts
 							tr
 								td #{post.title}
-								td #{post.summary.substr(0, 50) + '...'}
+								td #{post.summary.substr(0, 30) + '...'}
 								td #{post.author.name}
 								td #{post.category.description}
 								td #{post.date_posted_formatted}

@@ -1,0 +1,29 @@
+doctype html
+html
+	include includes/head
+	body
+		include includes/header
+		div(class='ui grid container content')
+			div(class='ui container')
+				h2(class='ui header')
+					div(class='content') #{post.title}
+						div(class='sub header') by #{post.author.name}
+				div(class='ui divider')
+				each p in post.post_details
+					if p.content_type.description === 'Header'
+						h1(class='ui medium header') #{p.content}
+					else if p.content_type.description === 'Paragraph'
+						p #{p.content}
+					else if p.content_type.description === 'Code'
+						pre
+							code #{p.content}
+					else if p.content_type.description === 'Image'
+						img(class='ui image' src='/images/' + p.file_name  alt=p.file_name)
+					else
+						p #{p.content}
+				div(class='ui hidden divider')
+				a(href='/')
+					i(class='arrow circle left icon')
+					span Back
+		include ./includes/scripts
+		include ./includes/footer

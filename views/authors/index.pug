@@ -3,7 +3,7 @@ html
 	include ../includes/head
 	body
 		include ../includes/header
-		div(class='ui grid container')
+		div(class='ui grid container content')
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='users icon')
@@ -22,15 +22,14 @@ html
 								td #{author.name}
 								td #{author.bio}
 								td
-									a(href='/authors/' + author._id + '/edit')
-										i(class='edit icon')
-										span Edit
 									form(class='ui form delete-button' action='/authors/' + author._id + '?_method=DELETE' method='post')
-										button(type='submit' class='submit-link' Onclick='return ConfirmDelete()' value='Delete')
-											| |
-											|
-											i(class='trash icon')
-											span Delete
+										div(class='ui buttons')
+											a(class='ui primary basic button' href='/authors/' + author._id + '/edit')
+												i(class='edit icon')
+												span Edit
+											button(type='submit' class='ui primary basic button' Onclick='return ConfirmDelete()' value='Delete')
+												i(class='trash icon')
+												span Delete
 					tfoot(class='full-width')
 						tr
 							th

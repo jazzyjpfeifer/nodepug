@@ -70,7 +70,7 @@ exports.post_show = function (req, res) {
             populate('author').
             populate({
                 path: 'post_details',
-                mode: 'Post_Detail',
+                model: 'Post_Detail',
                     populate: {
                         path: 'content_type',
                         model: 'Content_Type'

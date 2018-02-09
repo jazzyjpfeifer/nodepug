@@ -3,7 +3,7 @@ html
 	include ../includes/head
 	body
 		include ../includes/header
-		div(class='ui grid container')
+		div(class='ui grid container content')
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='tags icon')
@@ -13,24 +13,23 @@ html
 				table(class='ui very basic table')
 					thead
 						tr
+							th Order
 							th Name
-							th Sequence
 							th Actions
 					tbody
 						each category in categories
 							tr
-								td #{category.description}
 								td #{category.sequence}
+								td #{category.description}
 								td
-									a(href='/categories/' + category._id + '/edit')
-										i(class='edit icon')
-										span Edit
 									form(class='ui form delete-button' action='/categories/' + category._id + '?_method=DELETE' method='post')
-										button(type='submit' class='submit-link' Onclick='return ConfirmDelete()' value='Delete')
-											| |
-											|
-											i(class='trash icon')
-											span Delete
+										div(class='ui buttons')
+											a(class='ui primary basic button' href='/categories/' + category._id + '/edit')
+												i(class='edit icon')
+												span Edit
+											button(type='submit' class='ui primary basic button' Onclick='return ConfirmDelete()' value='Delete')
+												i(class='trash icon')
+												span Delete
 					tfoot(class='full-width')
 						tr
 							th

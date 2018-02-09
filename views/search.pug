@@ -1,0 +1,15 @@
+doctype html
+html
+	include includes/head
+	body
+		include includes/header
+		div(class='ui grid container content')
+			div(class='eleven side column')
+				h2(class='ui header') Search Results:
+				div(class='ui list')
+				each s in search
+					div(class='item') #{s.title}
+		include ./includes/scripts
+		include ./includes/footer
+
+

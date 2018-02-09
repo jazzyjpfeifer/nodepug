@@ -1,10 +1,9 @@
 doctype html
 html
 	include ../includes/head
-	body
+	body(class='Site')
 		include ../includes/header
-	each c in count
-		div(class='ui grid container')
+		div(class='ui grid container content')
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='plus circle icon')
@@ -12,12 +11,12 @@ html
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
 				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' enctype='multipart/form-data' method='post')
-					input(name='post_detail[post]' value=post._id type='hidden')
-					input(name='post_detail[post_title]' value=post.title type='hidden')
+					input(name='post_id' value=post._id type='hidden')
+					input(name='post_title' value=post.title type='hidden')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')
-							input(name='post_detail[content_type]' type='hidden')
+							input(name='content_type' type='hidden')
 							i(class='dropdown icon')
 							div(class='default text') Select one...
 							div(class='menu')
@@ -25,13 +24,17 @@ html
 									div(class='item' data-value=content_type._id) #{content_type.description}
 					div(class='field')
 						label(for='content') Content:
-						textarea(id='content' name='post_detail[content]' placeholder='Enter content here...')
+						textarea(id='content' name='content' placeholder='Enter content here...')
 					div(class='field')
+					each c in count
 						label(for='sequence') Sequence:
-						input(type='number' id='sequence' name='post_detail[sequence]' value=c.count + 1)
+						input(type='number' id='sequence' name='sequence' value=c.count + 1)
+					else
+						label(for='sequence') Sequence:
+						input(type='number' id='sequence' name='sequence' value=1)
 					div(class='field')
-						label(for='file') Upload Image:
-						input(type='file' id='file' name='file' multiple)
+						label(for='file_name') Upload File:
+						input(type='file' id='file_name' name='file_name' multiple)
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
 				a(href='/posts/' + post._id + '/show')

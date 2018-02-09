@@ -19,6 +19,7 @@ const index = require('./routes/index'),
       categories = require('./routes/category'),
       content_types = require('./routes/content_type'),
       posts = require('./routes/posts'),
+      search = require('./routes/search'),
       post_details = require('./routes/post_details');
 
 const app = express();
@@ -27,6 +28,8 @@ const db = mongoose.connection;
 mongoose.connect('mongodb://localhost/bi-steps');
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,12 +43,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'semantic')));
 app.use(methodOverride("_method"));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use('/authors', authors);
 app.use('/categories', categories);
 app.use('/content_types', content_types);
 app.use('/posts', posts);
 app.use('/posts/:id/show/post_details', post_details);
+app.use('/search', search);
 app.use('/', index);
 
 // catch 404 and forward to error handler

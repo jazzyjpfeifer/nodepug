@@ -1,60 +1,76 @@
-const Category = require('../models/category');
+const Category = require('../models/category'),
+      Post = require('../models/posts');
 
-const formidable = require('formidable');
-const path = require('path');
-const uploadDir = path.join(__dirname, '/..', '/public/', '/images/');
+const async = require('async');
 
-
-//C:\Sites\React\myapp1.2\public\images
-
+const moment = require('moment');
 
 exports.index = function (req, res) {
-    Category.
-        find({}).
-        select('description -_id').
-        sort({sequence: 1}).
-        exec(function (err, categoryDescriptions) {
-            if (err) {
-                console.log(err)
-            } else {
-                res.render('index', {title: 'BI-Steps.com', categories: categoryDescriptions});
-            }
+    async .parallel({
+        categories: function (callback) {
+            Category.
+            find({}).
+            select('description -_id').
+            sort({sequence: 1}).
+            exec(callback);
+        },
+        posts: function(callback) {
+            Post.
+            find({}).
+            populate('author').
+            sort({date_posted: -1}).
+            exec(callback);
+        },
+        archives: function (callback) {
+            Post.aggregate([
+                { "$group": {
+                        _id: { year: { $year: '$date_posted'}, month: {$month: '$date_posted'}},
+                        year: { '$addToSet': { $year: '$date_posted'}},
+                    }}
+            ]).
+            exec(callback);
+        },
+    }, function (err, results) {
+        if(err) {
+            console.log(err)
+        } else {
+            console.log(results.archives);
+            res.render('index', { title: 'BI-Steps.com', categories: results.categories, posts: results.posts, archives: results.archives});
+        }
     })
 };
 
 exports.admin = function (req, res) {
-    res.render('admin', { title: 'Admin' });
-
+    res.render('admin', {title: 'Admin Page'});
 };
 
-exports.upload = function (req, res) {
-    res.render('upload', {title: 'Upload Test'});
+exports.post = function (req, res) {
+    async.parallel({
+        post: function(callback) {
+            Post.
+            findById(req.params.id).
+            populate('author').
+            populate({
+                path: 'post_details',
+                model: 'Post_Detail',
+                populate: {
+                    path: 'content_type',
+                    model: 'Content_Type'
+                }
+            }).
+            exec(callback)
+        }
+    }, function (err, results) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.render('post', {title: 'Post', post: results.post});
+        }
+    })
 };
 
-exports.process = function (req, res) {
-    const form = new formidable.IncomingForm();
-    form.multiples = true;
-    form.keepExtensions = true;
-    form.uploadDir = uploadDir;
 
-    form.parse(req, (err, fields, files) => {
-        if (err) return res.status(500).json({ error: err });
-        res.redirect('/');
-    });
 
-    form.on('progress', function (bytesReceived, bytesExpected) {
-        const percent_complete = (bytesReceived / bytesExpected) * 100;
-        console.log('Percent ' + percent_complete.toFixed(2));
-    });
 
-    form.on('error', function (err) {
-        console.error(err);
-    });
 
-    form.on('fileBegin', function (name, file) {
-        const [fileName, fileExt] = file.name.split('.');
-        file.path = path.join(uploadDir, `${fileName}_${new Date().getTime()}.${fileExt}`);
-        console.log(file.name);
-    });
 
-};

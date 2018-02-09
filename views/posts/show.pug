@@ -3,7 +3,7 @@ html
 	include ../includes/head
 	body
 		include ../includes/header
-		div(class='ui grid container')
+		div(class='ui grid container content')
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='square plus icon')
@@ -27,7 +27,8 @@ html
 									td #{post_detail.content.substr(0, 90) + '...'}
 								td #{post_detail.content_type.description}
 								td
-									form(class='ui form delete-button' action='/posts/' + post._id + '?_method=DELETE' method='post')
+									form(class='ui form delete-button' action='/posts/' + post._id + '/show/post_details/' + post_detail._id + '?_method=DELETE' method='post')
+										input(type='hidden' name='post_id' value=post._id)
 										div(class='ui buttons')
 											a(class='ui primary basic button' href='/posts/' + post._id + '/show/post_details/' + post_detail._id + '/edit')
 												i(class='edit icon')

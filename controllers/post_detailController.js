@@ -2,15 +2,14 @@ const Post = require('../models/posts'),
       Post_Detail = require('../models/post_detail'),
       Content_Type = require('../models/content_type');
 
-const formidable = require('formidable'),
-      path = require('path'),
-      uploadDir = path.join(__dirname, '/..', '/public/', '/images/');
-
 const express = require('express'),
-      router = express.Router({mergeParams: true}),
       mongoose = require('mongoose');
 
 const async = require('async');
+
+//file upload
+const multer = require('multer');
+const path = require('path');
 
 exports.post_detail_new = function (req, res) {
     async.parallel({
@@ -40,55 +39,88 @@ exports.post_detail_new = function (req, res) {
         }
         else {
             res.render('post_details/new', {title: 'Add Post Detail', post: results.post, content_types: results.content_types, count: results.count});
+            console.log(JSON.stringify(results.count));
         }
     })
 };
 
 exports.post_detail_save = function (req, res) {
-    const form = new formidable.IncomingForm();
-    form.multiples = false;
-    form.keepExtensions = true;
-    form.uploadDir = uploadDir;
+    const uploadDir = path.join(__dirname, '/..', '/public/', '/images/');
+    const storage = multer.diskStorage({
+        destination: function (req, file, cb) {
+            cb(null, uploadDir)
+        },
+        filename: function (req, file, cb) {
+            cb(null, file.originalname)
+        }
+    });
+    const upload = multer({
+        storage: storage,
+        fileFilter: function (req, file, cb) {
+            const filetypes = /jpeg|jpg|png|gif/;
+            const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-
-    Post.findById(req.params.id, function(err, post){
-        if(err){
+            if (extname) {
+                return cb(null, true);
+            }
+            cb('Error: File upload only supports the following file types: ' + filetypes);
+        },
+        limits: {
+            fileSize: 4000000 //4 MB
+        }
+    }).single('file_name');
+    //Get Post related to Post_Details
+    Post.findById(req.params.id, function (err, post) {
+        if (err) {
             console.log(err);
         } else {
-            var form_date = req.body.post_detail;
-            console.log(form_date);
-            Post_Detail.create(req.body.post_detail, function(err, post_detail){
-                if(err){
+            upload(req, res, function (err) {
+                if (err) {
                     console.log(err);
+                    res.redirect('/');
                 } else {
-
-                    //processing upload
-                    form.parse(req, (err, fields, files) => {
-                        if (err) return res.status(500).json({ error: err });
+                    const post_id = req.body.post,
+                        post_title = req.body.post_title,
+                        content_type = req.body.content_type,
+                        content = req.body.content,
+                        sequence = req.body.sequence;
+                    const file = req.file;
+                    // if file upload is blank
+                    if (file == null) {
+                        newPost_Detail = {
+                            post_id: post_id,
+                            post_title: post_title,
+                            content_type: content_type,
+                            content: content,
+                            sequence: sequence
+                        };
+                    } else {
+                        const file_name = req.file.filename;
+                        newPost_Detail = {
+                            post_id: post_id,
+                            post_title: post_title,
+                            content_type: content_type,
+                            content: content,
+                            sequence: sequence,
+                            file_name: file_name
+                        };
+                    }
+                    //saving post detail
+                    Post_Detail.create(newPost_Detail, function (err, post_detail) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                            //saving post_detail
+                            post_detail.save();
+                            post.post_details.push(post_detail._id);
+                            post.save();
+                            res.redirect('/posts/' + post.id + '/show');
+                        }
                     });
-                    form.on('progress', function (bytesReceived, bytesExpected) {
-                        const percent_complete = (bytesReceived / bytesExpected) * 100;
-                        console.log('Percent ' + percent_complete.toFixed(2));
-                    });
-                    form.on('error', function (err) {
-                        console.error(err);
-                    });
-                    form.on('fileBegin', function (name, file) {
-                        const [fileName, fileExt] = file.name.split('.');
-                        file.path = path.join(uploadDir, `${fileName}_${new Date().getTime()}.${fileExt}`);
-                        console.log(file.name);
-                    });
-
-
-                   //saving comment
-                    //post_detail.save();
-                    //post.post_details.push(post_detail._id);
-                    //post.save();
-                    res.redirect('/posts/' + post.id + '/show');
                 }
             });
         }
-    });
+    })
 };
 
 
@@ -127,4 +159,42 @@ exports.post_detail_update = function (req, res) {
             res.redirect('/posts/' + post_id + '/show');
         }
     })
+};
+
+exports.post_detail_delete = function (req, res) {
+    const post_id = req.body.post_id;
+    async.waterfall([
+        function(callback) {
+            //removing Post_Detail from Post_Detail
+            Post_Detail.findByIdAndRemove(req.params.id, function (err, post_detail) {
+                console.log('delete Post Details from Post');
+                if (err) {
+                    console.log(err)
+                } else {
+                    console.log('Record was deleted from the database successfully');
+                    callback(null, post_detail);
+                }
+            })
+        },
+        function (post, callback) {
+        Post.update({'post_details': req.params.id}, {$pull:{'post_details': req.params.id}})
+            .exec(function (err, res) {
+                if(err) {
+                    console.log(err)
+                }
+                else {
+                    console.log(req.params.id);
+                    callback(null, post);
+                }
+            })
+        },
+    ], function (err, result) {
+        if (err) {
+            console.log(err)
+        } else {
+            console.log(result);
+            return result
+        }
+    });
+        res.redirect('/posts/'+ post_id +'/show');
 };

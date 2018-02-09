@@ -3,28 +3,31 @@ html
   include includes/head
   body
     include includes/header
-    div(class='ui grid container')
+    div(class='ui grid container content')
       div(class='eleven wide column')
-        h3(class=ui header) Welcome to BI-STEPS.COM
+        h3(class='ui header') Welcome to BI-STEPS.COM
         span A site dedicated to business intelligence, data analytics, sql, and data warehouse design and developement.
-        h2(class='ui large header') Blog header goes here
-        span March 6, 2017 by
-        a(href='') Justin Pfeifer
-        p(class='blog-summary') This blog post shows a few different types of content that's supported and styled with Semantic-UI.  Basic typesetting, list, and code are all supported.
-        div(class='ui divider')
+        each post in posts
+          h2(class='ui large header') #{post.title}
+          span #{post.date_posted_formatted}
+          |
+          | by
+          |
+          a(href='') #{post.author.name}
+          p(class='blog-summary') #{post.summary}
+          a(href='/' + post._id) Read More
+          div(class='ui divider')
       div(class='four wide right floated column')
         h4(class='ui header') Archives
         div(class='ui list')
-          a(class='item') September 2017
-          a(class='item') August  2017
-          a(class='item') June 2017
-          a(class='item') April 2017
-          a(class='item') March 2017
+          each a in archives
+            a(class='item') #{a.year}
         div(class='ui hidden divider')
           h4(class='ui header') Categories
           div(class='ui list')
             each category in categories
               a(class='item') #{category.description}
+    div(class='push')
     include ./includes/scripts
     include ./includes/footer
 

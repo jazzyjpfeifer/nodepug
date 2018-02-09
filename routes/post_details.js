@@ -11,11 +11,8 @@ router.post('/', post_detail_controller.post_detail_save);
 router.get('/:id/edit', post_detail_controller.post_detail_edit);
 
 router.put('/:id', post_detail_controller.post_detail_update);
-/*
-router.get('/:id/show', post_detail_controller.post_show);
 
-router.delete('/:id', post_detail_controller.post_delete);
-*/
+router.delete('/:id', post_detail_controller.post_detail_delete);
 
 module.exports = router;
 
