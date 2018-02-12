@@ -7,9 +7,7 @@ header
 			a(class='item' href='/') About
 			a(class='item' href='/') Contact
 			a(class='item' href='/') More Stuff..
-				a(class='item' href='/register') Sign Up
-				a(class='item' href='/register/login') Login
-				a(class='item' href='/register/logout') Logout
+			a(class='item' href='/register') Sign Up
 			div(class='right menu')
 					div(class='ui action icon input')
 					form(class='ui form item' action='/search' method='post')
@@ -20,6 +18,8 @@ header
 				div(class='item')
 					a(class='ui primary button' href='/register/login') Log In
 			else
+				div(class='item')
+					div(class='ui red horizontal label') Welcome #{currentUser.username}
 				div(class='item')
 					a(class='ui primary button' href='/register/logout') Log Out
 	div(class='ui hidden divider')

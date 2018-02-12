@@ -8,6 +8,6 @@ router.get('/', main_controller.index);
 
 router.get('/admin', main_controller.admin);
 
-router.get('/:id', main_controller.post);
+router.get('/post/:id', main_controller.post);
 
 module.exports = router;

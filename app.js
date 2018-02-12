@@ -5,16 +5,16 @@ const express = require('express'),
       methodOverride = require('method-override'),
       morgan = require('morgan'),
       passport = require('passport'),
-      LocalStrategy = require('passport-local'),
-      passportLocalMongoose = require('passport-local-mongoose');
+      LocalStrategy = require('passport-local');
 
 //require models
 const Author = require('./models/author'),
       Category = require('./models/category'),
       Content_Type = require('./models/content_type'),
       Post_Detail = require('./models/post_detail'),
+      Post = require('./models/posts'),
       User = require('./models/user'),
-      Post = require('./models/posts');
+      Role = require('./models/roles');
 
 
 //require routes
@@ -25,7 +25,8 @@ const index = require('./routes/index'),
       posts = require('./routes/posts'),
       search = require('./routes/search'),
       post_details = require('./routes/post_details'),
-      register = require('./routes/register');
+      register = require('./routes/register'),
+      roles = require('./routes/roles');
 
 
 const app = express();
@@ -33,6 +34,7 @@ const app = express();
 
 
 // Database Configuration
+mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
 mongoose.connect('mongodb://localhost/bi-steps');
 
@@ -64,14 +66,22 @@ app.use(express.static(path.join(__dirname, 'semantic')));
 app.use(methodOverride("_method"));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
+//middleware login function
+app.use(function (req, res, next) {
+   res.locals.currentUser = req.user;
+   next();
+});
+
+app.use('/', index);
 app.use('/authors', authors);
 app.use('/categories', categories);
 app.use('/content_types', content_types);
 app.use('/posts', posts);
-app.use('/posts/:id/show/post_details', post_details);
 app.use('/search', search);
+app.use('/posts/:id/show/post_details', post_details);
 app.use('/register', register);
-app.use('/', index);
+app.use('/roles', roles);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -35,8 +35,7 @@ exports.index = function (req, res) {
         if(err) {
             console.log(err)
         } else {
-            console.log(req.user);
-            res.render('index', { title: 'BI-Steps.com', categories: results.categories, posts: results.posts, archives: results.archives, currentUser: req.user});
+            res.render('index', { title: 'BI-Steps.com', categories: results.categories, posts: results.posts, archives: results.archives});
         }
     })
 };
@@ -44,6 +43,7 @@ exports.index = function (req, res) {
 exports.admin = function (req, res) {
     res.render('admin', {title: 'Admin Page'});
 };
+
 
 exports.post = function (req, res) {
     async.parallel({
@@ -69,6 +69,8 @@ exports.post = function (req, res) {
         }
     })
 };
+
+
 
 
 
