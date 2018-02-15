@@ -8,7 +8,7 @@ const main_controller = require('../controllers/mainController');
 
 router.get('/', main_controller.index);
 
-router.get('/admin', middleware, main_controller.admin);
+router.get('/admin', main_controller.admin);
 
 router.get('/login', main_controller.login);
 
