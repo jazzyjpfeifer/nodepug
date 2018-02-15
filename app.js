@@ -39,7 +39,7 @@ const app = express();
 // Database Configuration
 mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
-const url = 'mongodb://heroku_prjpcq9c:adv41el0n28nei0p35ee9t3em0@ds119598.mlab.com:19598/heroku_prjpcq9c' ||  'mongodb://localhost/bi-steps';
+const url = process.env.MONGODB_URI ||  'mongodb://localhost/bi-steps';
 mongoose.connect(url);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
