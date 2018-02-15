@@ -22,7 +22,6 @@ const Author = require('./models/author'),
       User = require('./models/user'),
       Role = require('./models/roles');
 
-
 //require routes
 const index = require('./routes/index'),
       authors = require('./routes/authors'),
@@ -34,14 +33,14 @@ const index = require('./routes/index'),
       register = require('./routes/register'),
       roles = require('./routes/roles');
 
-
 const app = express();
 
 
 // Database Configuration
 mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
-mongoose.connect('mongodb://localhost/bi-steps');
+const url = 'mongodb://heroku_prjpcq9c:adv41el0n28nei0p35ee9t3em0@ds119598.mlab.com:19598/heroku_prjpcq9c' ||  'mongodb://localhost/bi-steps';
+mongoose.connect(url);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
