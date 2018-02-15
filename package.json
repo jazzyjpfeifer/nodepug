@@ -2,9 +2,6 @@
   "name": "myapp1.2",
   "version": "0.0.1",
   "description": "My blogging app",
-  "scripts": {
-    "start": "node ./bin/www"
-  },
   "dependencies": {
     "async": "^2.6.0",
     "bluebird": "^3.5.1",
@@ -34,5 +31,10 @@
   "engine": {
     "node": "*",
     "npm": "*"
-  }
+  },
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "author": "Justin Pfeifer <bisteps360@gmail.com>",
+  "license": "CC-BY-1.0"
 }
