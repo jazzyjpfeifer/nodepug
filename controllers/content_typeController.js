@@ -22,17 +22,37 @@ exports.content_types_new = function (req, res) {
 };
 
 exports.content_types_save = function (req, res) {
-    const desc = req.body.description,
-        seq = req.body.sequence,
-        newContentType = {description: desc, sequence: seq};
-    Content_Type.create(newContentType, function (err, results) {
-        if(err) {
-            console.log(err)
-        } else {
-            console.log(results);
-            res.redirect('/content_types');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('description').notEmpty().withMessage('Category description cannot by empty');
+    req.checkBody('sequence').notEmpty().withMessage('Sequence cannot by empty')
+        .isInt().withMessage('Sequence must be a number');
+
+    let errors = req.validationErrors();
+
+    //Check for errors and re-render page
+    if(errors) {
+        const count = Content_Type.count({}, function(err, count) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render('content_types/new', {title: 'Add Content Types', count: count, errors: errors});
+            }
+        })
+
+    } else {
+        let desc = req.sanitize(req.body.description).trim(),
+            seq = req.sanitize(req.body.sequence).trim(),
+            newContentType = {description: desc, sequence: seq};
+        Content_Type.create(newContentType, function (err, results) {
+            if (err) {
+                console.log(err)
+            } else {
+                req.flash('success', 'The ' + desc + ' content type was added successfully!');
+                res.redirect('/content_types');
+            }
+        })
+    }
 };
 
 exports.content_types_edit = function (req, res) {
@@ -42,16 +62,31 @@ exports.content_types_edit = function (req, res) {
 };
 
 exports.content_types_update = function (req, res) {
-    const desc = req.body.description,
-          seq = req.body.sequence;
-    Content_Type.findByIdAndUpdate(req.params.id, {$set: {description: desc, sequence: seq}}, function (err, updatedContentType) {
-        if(err) {
-            console.log(err);
-        } else {
-            console.log('Records have been updated to the database: \n Description: ' + desc + '\n Sequence: ' + seq);
-            res.redirect('/content_types');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('description').notEmpty().withMessage('Category description cannot by empty');
+    req.checkBody('sequence').notEmpty().withMessage('Sequence cannot by empty')
+        .isInt().withMessage('Sequence must be a number');
+
+    // Get Errors
+    let errors = req.validationErrors();
+
+    if(errors){
+        Content_Type.findById(req.params.id, function (err, foundContentTypes) {
+            res.render('content_types/edit', {title: 'Edit Category Types', content_type:foundContentTypes, errors: errors});
+        })
+    } else {
+        let desc = req.body.description,
+            seq = req.body.sequence;
+        Content_Type.findByIdAndUpdate(req.params.id, {$set: {description: desc, sequence: seq}}, function (err, updatedContentType) {
+            if (err) {
+                console.log(err);
+            } else {
+                req.flash('success', 'Changes to the ' + desc + ' content type have been saved to the database successfully!');
+                res.redirect('/content_types');
+            }
+        })
+    }
 };
 
 exports.content_types_delete = function (req, res) {
@@ -59,6 +94,7 @@ exports.content_types_delete = function (req, res) {
         if(err){
             res.redirect('/content_types');
         } else {
+            req.flash('success', 'The content type has been removed from the database successfully!');
             res.redirect('/content_types');
         }
     })

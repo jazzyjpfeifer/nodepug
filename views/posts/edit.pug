@@ -19,10 +19,10 @@ html
 						div(class='ui selection dropdown')
 							input(name='author' type='hidden' value=post.author._id)
 							i(class='dropdown icon')
-							div(class='text') #{post.author.name}
+							div(class='text') #{post.author.first_name}
 							div(class='menu')
 								each author in authors
-									div(class='item' data-value=author._id) #{author.name}
+									div(class='item' data-value=author._id) #{author.first_name} #{author.last_name}
 					div(class='field')
 						label Category:
 						div(class='ui selection dropdown')
@@ -46,6 +46,7 @@ html
 				a(href='/posts')
 					i(class='arrow circle left icon')
 					span Back
+				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer
 

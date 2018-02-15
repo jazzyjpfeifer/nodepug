@@ -20,3 +20,13 @@ $('.boundary.example .button')
         boundary: '.boundary.example .segment'
     })
 ;
+
+//semantic message transitions
+$('.message .close')
+    .on('click', function() {
+        $(this)
+            .closest('.message')
+            .transition('fade')
+        ;
+    })
+;

@@ -14,7 +14,9 @@ router.get('/login', register_controller.login);
 router.post('/login', passport.authenticate('local',
     {
         successRedirect: '/',
-        failureRedirect: '/register/login'
+        failureRedirect: '/register/login',
+        failureFlash: true,
+        successFlash: 'Welcome to YelpCamp!'
     }),register_controller.login_post);
 
 router.get('/logout', register_controller.logout);

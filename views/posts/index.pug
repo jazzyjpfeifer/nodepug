@@ -24,7 +24,7 @@ html
 							tr
 								td #{post.title}
 								td #{post.summary.substr(0, 30) + '...'}
-								td #{post.author.name}
+								td #{post.author.first_name} #{post.author.last_name}
 								td #{post.category.description}
 								td #{post.date_posted_formatted}
 								td
@@ -54,6 +54,7 @@ html
 				a(href='/admin')
 					i(class='arrow circle left icon')
 					span Back
+				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer
 

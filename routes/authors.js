@@ -1,21 +1,22 @@
 const express = require('express');
 const router = express.Router();
+const middleware = require('../middleware');
 
 // Require controller
 const author_controller = require('../controllers/authorController');
 
-router.get('/', author_controller.author_index);
+router.get('/', middleware.isLoggedIn, author_controller.author_index);
 
-router.get('/new', author_controller.author_new);
+router.get('/new', middleware.isLoggedIn, author_controller.author_new);
 
-router.post('/', author_controller.author_save);
+router.post('/', middleware.isLoggedIn, author_controller.author_save);
 
-router.get('/:id/show', author_controller.author_show);
+router.get('/:id/show', middleware.isLoggedIn, author_controller.author_show);
 
-router.get('/:id/edit', author_controller.author_edit);
+router.get('/:id/edit', middleware.isLoggedIn, author_controller.author_edit);
 
-router.put('/:id', author_controller.author_update);
+router.put('/:id', middleware.isLoggedIn, author_controller.author_update);
 
-router.delete('/:id', author_controller.author_delete);
+router.delete('/:id', middleware.isLoggedIn, author_controller.author_delete);
 
 module.exports = router;

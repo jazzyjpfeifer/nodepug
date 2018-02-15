@@ -1,19 +1,20 @@
 const express = require('express');
 const router = express.Router();
+const middleware = require('../middleware');
 
 // Require controller
 const category_controller = require('../controllers/categoryController');
 
-router.get('/', category_controller.category_index);
+router.get('/', middleware.isLoggedIn, category_controller.category_index);
 
-router.get('/new', category_controller.category_new);
+router.get('/new', middleware.isLoggedIn, category_controller.category_new);
 
-router.post('/', category_controller.category_save);
+router.post('/', middleware.isLoggedIn, category_controller.category_save);
 
-router.get('/:id/edit', category_controller.category_edit);
+router.get('/:id/edit', middleware.isLoggedIn, category_controller.category_edit);
 
-router.put('/:id', category_controller.category_update);
+router.put('/:id', middleware.isLoggedIn, category_controller.category_update);
 
-router.delete('/:id', category_controller.category_delete);
+router.delete('/:id', middleware.isLoggedIn, category_controller.category_delete);
 
 module.exports = router;

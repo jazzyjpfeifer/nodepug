@@ -2,9 +2,15 @@ const express = require('express'),
       path = require('path'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
+      expressSanitizer = require('express-sanitizer'),
+      expressValidator = require('express-validator'),
+      cookieParser = require("cookie-parser"),
+      session = require('express-session'),
+      flash = require('connect-flash'),
       methodOverride = require('method-override'),
       morgan = require('morgan'),
       passport = require('passport'),
+      helmet = require('helmet');
       LocalStrategy = require('passport-local');
 
 //require models
@@ -32,7 +38,6 @@ const index = require('./routes/index'),
 const app = express();
 
 
-
 // Database Configuration
 mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
@@ -44,32 +49,44 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// uncomment after placing your favicon in /public
+//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(helmet());
+app.use(expressValidator());
+app.use(expressSanitizer());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'semantic')));
+app.use(methodOverride("_method"));
+app.use(cookieParser('secret'));
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+
 
 // Passport Configuration
-app.use(require('express-session')({
+app.use(session({
     secret: 'Who is the smartest man in the world?',
     resave: false,
     saveUninitialized: false
 }));
+
+// Express Messages Middleware
+
+
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'semantic')));
-app.use(methodOverride("_method"));
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
-
 //middleware login function
-app.use(function (req, res, next) {
-   res.locals.currentUser = req.user;
-   next();
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
 });
 
 app.use('/', index);

@@ -7,23 +7,18 @@ html
 			div(class='ui container')
 				h2(class='ui header')
 					i(class='plus circle icon')
-					div(class='content') Add New Category
-						div(class='sub header') Add new category form.
+					div(class='content') Add New Role
+						div(class='sub header') Add new role form.
 				div(class='ui divider')
-				form(class='ui form' action='/categories' method='post')
+				form(class='ui form' action='/roles' method='post')
 					div(class='field')
-						label(for='description') Category Description:
+						label(for='description') Role Description:
 						input(type='text' id='description' name='description')
-					div(class='field')
-						label(for='sequence') Sequence:
-						input(type='number' id='sequence' name='sequence' value=count + 1)
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
-				a(href='/categories')
+				a(href='/roles')
 					i(class='arrow circle left icon')
 					span Back
-				div(class='ui hidden divider')
-				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer
 

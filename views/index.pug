@@ -5,7 +5,10 @@ html
     include includes/header
     div(class='ui grid container content')
       div(class='eleven wide column')
-        h3(class='ui header') Welcome to BI-STEPS.COM
+        if(currentUser)
+          h3(class='ui header') Welcome to BI-STEPS.COM #{currentUser.username}
+        else
+          h3(class='ui header') Welcome to BI-STEPS.COM
         span A site dedicated to business intelligence, data analytics, sql, and data warehouse design and developement.
         each post in posts
           h2(class='ui large header') #{post.title}
@@ -13,7 +16,7 @@ html
           |
           | by
           |
-          a(href='') #{post.author.name}
+          a(href='') #{post.author.first_name} #{post.author.last_name}
           p(class='blog-summary') #{post.summary}
           a(href='/post/' + post._id) Read More
           div(class='ui divider')

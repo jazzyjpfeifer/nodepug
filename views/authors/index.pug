@@ -13,13 +13,15 @@ html
 				table(class='ui very basic table')
 					thead
 						tr
-							th Name
+							th First Name
+							th Last Name
 							th Bio
 							th Actions
 					tbody
 						each author in authors
 							tr
-								td #{author.name}
+								td #{author.first_name}
+								td #{author.last_name}
 								td #{author.bio}
 								td
 									form(class='ui form delete-button' action='/authors/' + author._id + '?_method=DELETE' method='post')
@@ -38,10 +40,13 @@ html
 									span Add Authors
 							th
 							th
+							th
 				div(class='ui hidden divider')
-				a(href='/admin')
-					i(class='arrow circle left icon')
-					span Back
+				div(class='ui container')
+					a(href='/admin')
+						i(class='arrow circle left icon')
+						span Back
+				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer
 

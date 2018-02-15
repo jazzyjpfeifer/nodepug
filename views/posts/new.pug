@@ -22,7 +22,7 @@ html
 							div(class='default text') Select one...
 							div(class='menu')
 								each author in authors
-									div(class='item' data-value=author._id) #{author.name}
+									div(class='item' data-value=author._id) #{author.first_name} #{author.last_name}
 					div(class='field')
 						label Category:
 						div(class='ui selection dropdown')
@@ -40,6 +40,8 @@ html
 				a(href='/posts')
 					i(class='arrow circle left icon')
 					span Back
+				div(class='ui hidden divider')
+				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer
 

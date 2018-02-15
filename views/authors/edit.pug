@@ -12,8 +12,11 @@ html
 				div(class='ui divider')
 				form(class='ui form' action='/authors/'+ author._id +'?_method=PUT' method='post')
 					div(class='field')
-						label(for='name') Full Name:
-						input(type='text' id='name' name='name' value=author.name)
+						label(for='first_name') First Name:
+						input(type='text' id='first_name' name='first_name' value=author.first_name)
+					div(class='field')
+						label(for='last_name') Last Name:
+						input(type='text' id='last_name' name='last_name' value=author.last_name)
 					div(class='field')
 						label(for='bio') Bio:
 						textarea(id='bio' name='bio') #{author.bio}
@@ -22,5 +25,7 @@ html
 				a(href='/authors')
 					i(class='arrow circle left icon')
 					span Back
+				div(class='ui hidden divider')
+				include ../includes/messages
 		include ../includes/scripts
 		include ../includes/footer

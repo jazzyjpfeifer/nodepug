@@ -1,0 +1,29 @@
+doctype html
+html
+	include includes/head
+	body
+		include includes/header
+		div(class='ui grid container content')
+			div(class='eleven wide column')
+				h3(class='ui header') Contact Us
+				form(class='ui form' action='/contact' method='post')
+					div(class='field')
+						label(for='name') Name:
+						input(type='text' id='name' name='name')
+					div(class='field')
+						label(for='email') Email:
+						input(type='email' id='email' name='email')
+					div(class='field')
+						label(for='message') Message:
+						textarea(id='message' name='message')
+					button(class='ui primary button' type='submit') Send
+
+				div(class='ui hidden divider')
+				a(href='/')
+					i(class='arrow circle left icon')
+					span Back
+		div(class='push')
+		include ./includes/scripts
+		include ./includes/footer
+
+

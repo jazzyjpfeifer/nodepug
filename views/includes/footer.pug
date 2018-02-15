@@ -1,9 +1,13 @@
 footer(class='footer')
   div(class='ui black inverted vertical footer segment')
     div(class='ui center aligned container')
-      p &copy BI-STEPS.COM 2018
+      p &copy 2018 BI-STEPS.COM
       a(href='/') Home |
-      a(href='/')  About |
-      a(href='/')  Contact |
-      a(href='/')  Privary Policy
+      a(href='/about')  About |
+      a(href='/contact')  Contact |
+      if(currentUser)
+        a(href='/register/logout') Log Out |
+      else
+        a(href='/login')  Log In |
+      a(href='/privacy')  Privacy Policy
 

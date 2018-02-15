@@ -13,23 +13,38 @@ exports.author_index = function (req, res) {
 };
 
 exports.author_new = function (req, res) {
-    res.render('authors/new', {title: 'New Author'});
+    res.render('authors/new', {title: 'Add Author'});
 };
 
+
 exports.author_save = function (req, res) {
-    //getting data from form
-    const name = req.body.name,
-          bio = req.body.bio,
-          newAuthor = {name: name, bio: bio};
-    Author.create(newAuthor, function (err, newlyCreated) {
-        if(err){
-            console.log(err);
-            res.redirect('/authors');
-        } else {
-            console.log(newlyCreated);
-            res.redirect('/authors');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('first_name').notEmpty().withMessage('First name cannot by empty')
+        .isAlphanumeric().withMessage('Full Name has non-alphanumeric characters.');
+    req.checkBody('last_name').notEmpty().withMessage('Last name cannot by empty')
+        .isAlphanumeric().withMessage('Full Name has non-alphanumeric characters.');
+    req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
+
+    // Get Errors
+    let errors = req.validationErrors();
+
+    if(errors){
+        res.render('authors/new', {title: 'Add Author', errors: errors});
+    } else {
+        let first_name = req.sanitize(req.body.first_name).trim(),
+            last_name = req.sanitize(req.body.last_name).trim(),
+            bio = req.sanitize(req.body.bio).trim(),
+            newAuthor = {first_name: first_name, last_name: last_name, bio: bio};
+        Author.create(newAuthor, function (err, newlyCreated) {
+            if(err){
+                console.log(err);
+            } else {
+                req.flash('success', newlyCreated.name + ' was successfully added as an author!');
+                res.redirect('/authors');
+            }
+        })
+    }
 };
 
 exports.author_show = function (req, res) {
@@ -48,20 +63,36 @@ exports.author_edit = function (req, res) {
     exec(function (err, foundAuthor) {
         res.render('authors/edit', {title: 'Edit Author', author: foundAuthor});
     })
-}
+};
 
 exports.author_update = function (req, res) {
-    var name = req.body.name,
-        bio = req.body.bio;
-    Author.findByIdAndUpdate(req.params.id, {$set: {name: name, bio: bio}}, function (err, updatedAuthor) {
-        if(err){
-            console.log(err);
-            res.redirect('/authors');
-        } else {
-            console.log('Records have been updated to the database: \n Name: ' + name + '\n bio: ' + bio);
-            res.redirect('/authors');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('first_name').notEmpty().withMessage('First name cannot by empty');
+    req.checkBody('last_name').notEmpty().withMessage('Last name cannot by empty');
+    req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
+
+    // Get Errors
+    let errors = req.validationErrors();
+
+    if(errors){
+        Author.findById(req.params.id).
+        exec(function (err, foundAuthor) {
+            res.render('authors/edit', {title: 'Edit Author', author: foundAuthor, errors: errors});
+        })
+    } else {
+        let first_name = req.sanitize(req.body.first_name).trim(),
+            last_name = req.sanitize(req.body.last_name).trim(),
+            bio = req.sanitize(req.body.bio).trim();
+        Author.findByIdAndUpdate(req.params.id, {$set: {first_name: first_name, last_name: last_name, bio: bio}}, function (err, updatedAuthor) {
+            if (err) {
+                console.log(err);
+            } else {
+                req.flash('success', 'Changes to author ' + first_name + ' ' + last_name + ' have been saved successfully to the database!');
+                res.redirect('/authors');
+            }
+        })
+    }
 };
 
 exports.author_delete = function (req, res) {
@@ -70,7 +101,7 @@ exports.author_delete = function (req, res) {
                 console.log(err);
                 res.redirect('/authors');
             } else {
-                console.log('The author has been removed from the database');
+                req.flash('success', 'Author has been successfully removed from the database!');
                 res.redirect('/authors');
             }
         })

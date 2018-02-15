@@ -2,7 +2,8 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var authorSchema = new Schema({
-    name: String,
+    first_name: String,
+    last_name: String,
     bio: String
 });
 

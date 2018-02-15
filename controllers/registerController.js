@@ -12,7 +12,7 @@ exports.register_post = function (req, res) {
     User.register(newUser, req.body.password, function (err, user) {
         if(err) {
             console.log(err);
-            return res.render('register/register');
+            return res.render('register/login');
         }
         passport.authenticate('local')(req, res, function() {
             console.log('Authenticating...');
@@ -23,7 +23,7 @@ exports.register_post = function (req, res) {
 
 //Login
 exports.login = function (req, res) {
-    res.render('register/login', { title: 'Login'})
+    res.render('register/login', { title: 'Login', message: req.flash('error')});
 };
 
 exports.login_post = function (req, res) {

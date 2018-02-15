@@ -7,7 +7,7 @@ html
 			div(class='ui container')
 				h2(class='ui header')
 					div(class='content') #{post.title}
-						div(class='sub header') by #{post.author.name}
+						div(class='sub header') by #{post.author.first_name} #{post.author.last_name}
 				div(class='ui divider')
 				each p in post.post_details
 					if p.content_type.description === 'Header'
@@ -15,8 +15,9 @@ html
 					else if p.content_type.description === 'Paragraph'
 						p #{p.content}
 					else if p.content_type.description === 'Code'
-						pre
-							code #{p.content}
+						div(class='ui segment')
+							pre
+								code #{p.content}
 					else if p.content_type.description === 'Image'
 						img(class='ui image' src='/images/' + p.file_name  alt=p.file_name)
 					else

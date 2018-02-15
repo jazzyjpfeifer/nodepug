@@ -1,0 +1,17 @@
+if success && success.length > 0
+	div(class='ui icon success message')
+		i(class='open envelope icon')
+		i(class="close icon")
+		div(class='content')
+			div(class='header') Success!
+			ul(class='list')
+				li #{success}
+if errors
+		div(class='ui icon error message')
+			i(class='open envelope icon')
+			i(class="close icon")
+			div(class='content')
+				div(class='header') Error Message!
+				ul(class='list')
+				each error, i in errors
+					li #{error.msg}

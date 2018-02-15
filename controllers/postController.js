@@ -14,7 +14,7 @@ exports.post_list = function (req, res) {
         if(err){
             console.log(err);
         } else {
-            res.render('posts/index', { title: 'Posts', posts:posts });
+            res.render('posts/index', { title: 'Posts', posts: posts});
         }
     })
 };
@@ -33,7 +33,7 @@ exports.post_new = function (req, res) {
         authors: function (callback) {
             Author.
             find({}).
-            select('_id name').
+            select('_id first_name last_name').
             exec(callback);
         },
     }, function (err, results) {
@@ -46,19 +46,55 @@ exports.post_new = function (req, res) {
 };
 
 exports.post_save = function (req, res) {
-    //getting data from form
-    const title = req.body.title,
-          summary = req.body.summary,
-          category = req.body.category,
-          author = req.body.author,
-          newPost = {title: title, summary: summary, category: category, author: author};
-    Post.create(newPost, function (err, post) {
-        if(err){
-            console.log(err);
-        } else {
-            res.redirect('/posts');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('title').notEmpty().withMessage('Title cannot by empty');
+    req.checkBody('summary').notEmpty().withMessage('Summary cannot by empty');
+    req.checkBody('category').notEmpty().withMessage('Category cannot by empty');
+    req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
+
+    let errors = req.validationErrors();
+
+    if(errors) {
+        async.parallel({
+            categories: function (callback) {
+                Category.
+                find({}).
+                populate('category').
+                populate('author').
+                select('_id description').
+                sort({sequence: 1}).
+                exec(callback);
+            },
+            authors: function (callback) {
+                Author.
+                find({}).
+                select('_id first_name last_name').
+                exec(callback);
+            },
+        }, function (err, results) {
+            if(err) {
+                console.log(err)
+            } else {
+                res.render('posts/new', { title: 'New Post', categories: results.categories, authors: results.authors, errors: errors});
+            }
+        })
+
+    } else {
+        let title = req.sanitize(req.body.title).trim(),
+            summary = req.sanitize(req.body.summary).trim(),
+            category = req.sanitize(req.body.category).trim(),
+            author = req.sanitize(req.body.author).trim(),
+            newPost = {title: title, summary: summary, category: category, author: author};
+        Post.create(newPost, function (err, post) {
+            if(err){
+                console.log(err);
+            } else {
+                req.flash('success', title + 'was added successfully as a post!');
+                res.redirect('/posts');
+            }
+        })
+    }
 };
 
 exports.post_show = function (req, res) {
@@ -105,7 +141,6 @@ exports.post_edit = function (req, res) {
         authors: function (callback) {
             Author.
             find({}).
-            select('_id name').
             exec(callback);
         },
     }, function (err, results) {
@@ -118,19 +153,60 @@ exports.post_edit = function (req, res) {
 };
 
 exports.post_update = function (req, res) {
-    const title = req.body.title,
-          author = req.body.author,
-          category = req.body.category,
-          summary = req.body.summary,
-          date_posted = req.body.date_posted;
-    Post.findByIdAndUpdate(req.params.id, {$set: {title:title, author: author, category:category, summary:summary, date_posted:date_posted }}, function (err, updatedPost) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log(updatedPost);
-            res.redirect('/posts');
-        }
-    })
+
+    //Validate Fields
+    req.checkBody('title').notEmpty().withMessage('Title cannot by empty');
+    req.checkBody('summary').notEmpty().withMessage('Summary cannot by empty');
+    req.checkBody('category').notEmpty().withMessage('Category cannot by empty');
+    req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
+    req.checkBody('date_posted').notEmpty().withMessage('Date posted cannot by blank');
+
+    let errors = req.validationErrors();
+
+    if(errors){
+        async.parallel({
+            post: function (callback) {
+                Post.
+                findById(req.params.id).
+                populate('category').
+                populate('author').
+                exec(callback)
+            },
+            categories: function (callback) {
+                Category.
+                find({}).
+                select('_id description').
+                sort({sequence: 1}).
+                exec(callback);
+            },
+            authors: function (callback) {
+                Author.
+                find({}).
+                exec(callback);
+            },
+        }, function (err, results) {
+            if(err) {
+                console.log(err)
+            } else {
+                res.render('posts/edit', {title: 'Edit Post', post: results.post, categories: results.categories, authors: results.authors, errors: errors});
+            }
+        })
+    } else {
+        let title = req.sanitize(req.body.title).trim(),
+            author = req.sanitize(req.body.author).trim(),
+            category = req.sanitize(req.body.category).trim(),
+            summary = req.sanitize(req.body.summary).trim(),
+            date_posted = req.sanitize(req.body.date_posted).trim();
+        Post.findByIdAndUpdate(req.params.id, {$set: {title:title, author: author, category:category, summary:summary, date_posted:date_posted }}, function (err, updatedPost) {
+            if (err) {
+                console.log(err);
+            } else {
+                req.flash('success', 'Changes to the ' + title + ' post have been saved successfully to the database!');
+                res.redirect('/posts');
+            }
+        })
+    }
+
 };
 
 exports.post_delete = function (req, res) {
@@ -138,7 +214,7 @@ exports.post_delete = function (req, res) {
         if(err) {
             console.log(err)
         } else {
-            console.log('Record was deleted from the database successfully');
+            req.flash('success', 'The post has been removed from the database successfully!');
             res.redirect('/posts');
         }
     })
