@@ -70,7 +70,7 @@ exports.contact_send = function (req, res) {
             from: email,
             to: 'bisteps360@gmail.com',
             subject: 'From: ' + name,
-            html: '<p>' + message + '</p>'
+            html: '<b>' + message + '</b>'
         };
 
     transporter.sendMail(mailOptions, function (err, info) {
