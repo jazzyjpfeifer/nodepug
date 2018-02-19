@@ -38,8 +38,16 @@ const app = express();
 // Database Configuration
 mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
-const url = process.env.OPENSHIFT_MONGODB_DB_URL ||  'mongodb://localhost/bi-steps';
-mongoose.connect(url);
+
+var connection_string = 'mongodb://localhost/bi-steps';
+if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
+    connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
+        process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
+        process.env.OPENSHIFT_MONGODB_DB_HOST + ':' +
+        process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
+        process.env.OPENSHIFT_APP_NAME;
+}
+mongoose.connect(connection_string);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
