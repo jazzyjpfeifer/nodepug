@@ -36,7 +36,12 @@
   "engine": {
     "node": "*",
     "npm": "*"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jazzyjpfeifer/nodepug.git"
+  },
+  "license": "MIT"
 }
 
 
