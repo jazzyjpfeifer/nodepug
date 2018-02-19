@@ -39,8 +39,7 @@ const app = express();
 mongoose.Promise = require('bluebird');
 const db = mongoose.connection;
 
-var connection_string = 'mongodb://userB6B:1AxkmxMrrr48igvN@mongodb/bi-steps' || 'mongodb://localhost/bi-steps';
-/*
+var connection_string = 'mongodb://localhost/bi-steps';
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
     connection_string = process.env.OPENSHIFT_MONGODB_DB_USERNAME + ":" +
         process.env.OPENSHIFT_MONGODB_DB_PASSWORD + "@" +
@@ -48,7 +47,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
         process.env.OPENSHIFT_MONGODB_DB_PORT + '/' +
         process.env.OPENSHIFT_APP_NAME;
 }
-*/
+console.log('Connection String = ' + connection_string);
 mongoose.connect(connection_string);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
