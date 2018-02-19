@@ -10,8 +10,7 @@ html
 					div(class='content') Add Post Details
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
-				form(class='ui form' action='/posts/'+ post_detail.post._id +'/show/post_details/'+ post_detail._id +'?_method=PUT' method='post')
-					input(name='post_id' type='hidden' value=post_detail.post._id)
+				form(class='ui form' action='' method='post')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')
@@ -29,8 +28,9 @@ html
 						input(type='number' id='sequence' name='post_detail[sequence]' value=post_detail.sequence)
 					button(class='ui primary button' type='submit') Save
 				div(class='ui hidden divider')
-				a(href='/posts/'+ post_detail.post._id + '/show')
+				a(href='')
 					i(class='arrow circle left icon')
 					span Back
+				p #{post_detail}
 		include ../includes/scripts
 		include ../includes/footer

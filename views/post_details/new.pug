@@ -11,8 +11,6 @@ html
 						div(class='sub header') Add post details form.
 				div(class='ui divider')
 				form(class='ui form' action='/posts/'+ post._id +'/show/post_details' enctype='multipart/form-data' method='post')
-					input(name='post_id' value=post._id type='hidden')
-					input(name='post_title' value=post.title type='hidden')
 					div(class='field')
 						label Content Type:
 						div(class='ui selection dropdown')

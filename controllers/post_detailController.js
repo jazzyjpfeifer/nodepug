@@ -79,15 +79,15 @@ exports.post_detail_save = function (req, res) {
                     console.log(err);
                     res.redirect('/');
                 } else {
-                    const post_id = req.body.post,
-                        post_title = req.body.post_title,
+                    let post_id = post._id,
+                        post_title = post.title,
                         content_type = req.body.content_type,
                         content = req.body.content,
-                        sequence = req.body.sequence;
-                    const file = req.file;
+                        sequence = req.body.sequence,
+                        file = req.file;
                     // if file upload is blank
                     if (file == null) {
-                        newPost_Detail = {
+                       newPost_Detail = {
                             post_id: post_id,
                             post_title: post_title,
                             content_type: content_type,
@@ -95,7 +95,7 @@ exports.post_detail_save = function (req, res) {
                             sequence: sequence
                         };
                     } else {
-                        const file_name = req.file.filename;
+                        let file_name = req.file.filename;
                         newPost_Detail = {
                             post_id: post_id,
                             post_title: post_title,
@@ -114,7 +114,7 @@ exports.post_detail_save = function (req, res) {
                             post_detail.save();
                             post.post_details.push(post_detail._id);
                             post.save();
-                            res.redirect('/posts/' + post.id + '/show');
+                            res.redirect('/posts/' + post_id + '/show');
                         }
                     });
                 }
@@ -127,26 +127,61 @@ exports.post_detail_save = function (req, res) {
 exports.post_detail_edit = function (req, res) {
     async.parallel({
             post_detail: function (callback) {
-                Post_Detail.
+                Post.
                 findById(req.params.id).
-                populate('post').
-                populate('content_type').
+                populate('post_detail').
                 exec(callback)
             },
             content_types: function (callback) {
                 Content_Type.
                 find({}).
                 exec(callback)
-            },
+            }
         },
         function (err, results) {
             if(err) {
                 console.log(err);
             } else {
-                res.render('post_details/edit', {title: 'Edit Post Detail', post_detail: results.post_detail, content_types: results.content_types});
+                res.render('post_details/edit', {title: 'Edit Post Detail', post: results.post, post_detail: results.post_detail, content_types: results.content_types});
+                console.log(results.post)
             }
         })
 };
+
+/*
+exports.post_detail_new = function (req, res) {
+    async.parallel({
+        post: function (callback) {
+            Post.
+            findById(req.params.id).
+            exec(callback)
+        },
+        content_types: function (callback) {
+            Content_Type.
+            find({}).
+            exec(callback)
+        },
+        count: function (callback) {
+            Post.aggregate([
+                {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+                {$unwind: '$post_details'},
+                {$group: {
+                        _id: '$_id', count: { $sum: 1}
+                    }}
+            ]).
+            exec(callback)
+        }
+    }, function (err, results) {
+        if(err) {
+            console.log(err);
+        }
+        else {
+            res.render('post_details/new', {title: 'Add Post Detail', post: results.post, content_types: results.content_types, count: results.count});
+            console.log(JSON.stringify(results.count));
+        }
+    })
+};
+ */
 
 exports.post_detail_update = function (req, res) {
     const post_id = req.body.post_id;

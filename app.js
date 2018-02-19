@@ -45,7 +45,7 @@ mongoose.connect(url);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-seedDB();
+//seedDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
