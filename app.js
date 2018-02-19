@@ -32,6 +32,7 @@ const index = require('./routes/index'),
     post_details = require('./routes/post_details'),
     register = require('./routes/register'),
     roles = require('./routes/roles');
+    seedDB = require('./seeds');
 
 const app = express();
 
@@ -43,6 +44,8 @@ const url = process.env.MONGODB_URI ||  'mongodb://localhost/bi-steps';
 mongoose.connect(url);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+seedDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
