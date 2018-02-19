@@ -8,14 +8,14 @@ exports.search = function (req, res) {
     console.log(search);
     //res.render('search', {title: 'Search Results'});
 
-     Post.find({$text: { $search: search}})
-         .exec(function(err, search) {
-             if(err) {
-                 console.log(err);
-                 res.redirect('/');
-             } else {
-                 console.log(search);
-                 res.render('search', {title: 'Search Results', search: search});
-             }
-         })
+    Post.find({$text: { $search: search}})
+        .exec(function(err, search) {
+            if(err) {
+                console.log(err);
+                res.redirect('/');
+            } else {
+                console.log(search);
+                res.render('search', {title: 'Search Results', search: search});
+            }
+        })
 };

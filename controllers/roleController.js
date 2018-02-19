@@ -20,7 +20,7 @@ exports.role_new = function (req, res) {
 exports.role_save = function (req, res) {
     //getting data from form
     const description = req.body.description,
-          newrole = {description: description};
+        newrole = {description: description};
     console.log(description);
     Role.create(newrole, function (err, newlyCreated) {
         if(err){

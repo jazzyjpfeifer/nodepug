@@ -31,7 +31,7 @@ exports.category_save = function (req, res) {
     req.checkBody('sequence').notEmpty().withMessage('Sequence cannot by empty')
         .isInt().withMessage('Sequence must be a number');
 
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors) {
         const count = Category.count({}, function(err, count) {
@@ -43,7 +43,7 @@ exports.category_save = function (req, res) {
         })
 
     } else {
-        var desc = req.sanitize(req.body.description).trim(),
+        let desc = req.sanitize(req.body.description).trim(),
             seq = req.sanitize(req.body.sequence).trim(),
             newCategory = {description: desc, sequence: seq};
         Category.create(newCategory, function (err, results) {
@@ -71,14 +71,14 @@ exports.category_update = function (req, res) {
         .isInt().withMessage('Sequence must be a number');
 
     // Get Errors
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors){
         Category.findById(req.params.id, function (err, foundCategory) {
             res.render('categories/edit', {title: 'Edit Category', category: foundCategory, errors: errors});
         })
     } else {
-        var desc = req.sanitize(req.body.description).trim(),
+        let desc = req.sanitize(req.body.description).trim(),
             seq = req.sanitize(req.body.sequence).trim();
         Category.findByIdAndUpdate(req.params.id, { $set: { description: desc, sequence: seq }
         }, function (err, updatedCategory) {

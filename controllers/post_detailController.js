@@ -1,9 +1,9 @@
 const Post = require('../models/posts'),
-      Post_Detail = require('../models/post_detail'),
-      Content_Type = require('../models/content_type');
+    Post_Detail = require('../models/post_detail'),
+    Content_Type = require('../models/content_type');
 
 const express = require('express'),
-      mongoose = require('mongoose');
+    mongoose = require('mongoose');
 
 const async = require('async');
 
@@ -14,23 +14,23 @@ const path = require('path');
 exports.post_detail_new = function (req, res) {
     async.parallel({
         post: function (callback) {
-        Post.
+            Post.
             findById(req.params.id).
             exec(callback)
         },
         content_types: function (callback) {
-        Content_Type.
+            Content_Type.
             find({}).
             exec(callback)
         },
         count: function (callback) {
-        Post.aggregate([
-            {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
-            {$unwind: '$post_details'},
-            {$group: {
-                _id: '$_id', count: { $sum: 1}
-                }}
-        ]).
+            Post.aggregate([
+                {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+                {$unwind: '$post_details'},
+                {$group: {
+                        _id: '$_id', count: { $sum: 1}
+                    }}
+            ]).
             exec(callback)
         }
     }, function (err, results) {
@@ -107,9 +107,9 @@ exports.post_detail_save = function (req, res) {
                     }
                     //saving post detail
                     Post_Detail.create(newPost_Detail, function (err, post_detail) {
-                    if (err) {
-                        console.log(err);
-                    } else {
+                        if (err) {
+                            console.log(err);
+                        } else {
                             //saving post_detail
                             post_detail.save();
                             post.post_details.push(post_detail._id);
@@ -126,31 +126,31 @@ exports.post_detail_save = function (req, res) {
 
 exports.post_detail_edit = function (req, res) {
     async.parallel({
-        post_detail: function (callback) {
-        Post_Detail.
-            findById(req.params.id).
-            populate('post').
-            populate('content_type').
-            exec(callback)
+            post_detail: function (callback) {
+                Post_Detail.
+                findById(req.params.id).
+                populate('post').
+                populate('content_type').
+                exec(callback)
+            },
+            content_types: function (callback) {
+                Content_Type.
+                find({}).
+                exec(callback)
+            },
         },
-        content_types: function (callback) {
-            Content_Type.
-            find({}).
-            exec(callback)
-        },
-    },
         function (err, results) {
             if(err) {
                 console.log(err);
             } else {
                 res.render('post_details/edit', {title: 'Edit Post Detail', post_detail: results.post_detail, content_types: results.content_types});
             }
-    })
+        })
 };
 
 exports.post_detail_update = function (req, res) {
-        const post_id = req.body.post_id;
-        Post_Detail.findByIdAndUpdate(req.params.id, req.body.post_detail, function(err, updatedPost_Detail) {
+    const post_id = req.body.post_id;
+    Post_Detail.findByIdAndUpdate(req.params.id, req.body.post_detail, function(err, updatedPost_Detail) {
         if(err) {
             console.log(err);
         }
@@ -177,16 +177,16 @@ exports.post_detail_delete = function (req, res) {
             })
         },
         function (post, callback) {
-        Post.update({'post_details': req.params.id}, {$pull:{'post_details': req.params.id}})
-            .exec(function (err, res) {
-                if(err) {
-                    console.log(err)
-                }
-                else {
-                    console.log(req.params.id);
-                    callback(null, post);
-                }
-            })
+            Post.update({'post_details': req.params.id}, {$pull:{'post_details': req.params.id}})
+                .exec(function (err, res) {
+                    if(err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log(req.params.id);
+                        callback(null, post);
+                    }
+                })
         },
     ], function (err, result) {
         if (err) {
@@ -196,5 +196,5 @@ exports.post_detail_delete = function (req, res) {
             return result
         }
     });
-        res.redirect('/posts/'+ post_id +'/show');
+    res.redirect('/posts/'+ post_id +'/show');
 };

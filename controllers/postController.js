@@ -1,7 +1,7 @@
 const Post = require('../models/posts'),
-      Category = require('../models/category'),
-      Author = require('../models/author'),
-      Content_Type = require('../models/content_type');
+    Category = require('../models/category'),
+    Author = require('../models/author'),
+    Content_Type = require('../models/content_type');
 
 const async = require('async');
 
@@ -53,7 +53,7 @@ exports.post_save = function (req, res) {
     req.checkBody('category').notEmpty().withMessage('Category cannot by empty');
     req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
 
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors) {
         async.parallel({
@@ -81,7 +81,7 @@ exports.post_save = function (req, res) {
         })
 
     } else {
-        var title = req.sanitize(req.body.title).trim(),
+        let title = req.sanitize(req.body.title).trim(),
             summary = req.sanitize(req.body.summary).trim(),
             category = req.sanitize(req.body.category).trim(),
             author = req.sanitize(req.body.author).trim(),
@@ -106,12 +106,12 @@ exports.post_show = function (req, res) {
             populate({
                 path: 'post_details',
                 model: 'Post_Detail',
-                    populate: {
-                        path: 'content_type',
-                        model: 'Content_Type'
-                        }
-                    }).
-                exec(callback)
+                populate: {
+                    path: 'content_type',
+                    model: 'Content_Type'
+                }
+            }).
+            exec(callback)
         },
     }, function (err, results) {
         if (err) {
@@ -161,7 +161,7 @@ exports.post_update = function (req, res) {
     req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
     req.checkBody('date_posted').notEmpty().withMessage('Date posted cannot by blank');
 
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors){
         async.parallel({
@@ -192,7 +192,7 @@ exports.post_update = function (req, res) {
             }
         })
     } else {
-        var title = req.sanitize(req.body.title).trim(),
+        let title = req.sanitize(req.body.title).trim(),
             author = req.sanitize(req.body.author).trim(),
             category = req.sanitize(req.body.category).trim(),
             summary = req.sanitize(req.body.summary).trim(),

@@ -2,8 +2,8 @@ const Author = require('../models/author');
 
 exports.author_index = function (req, res) {
     Author.
-        find({}).
-        exec (function (err, listAuthors) {
+    find({}).
+    exec (function (err, listAuthors) {
         if(err) {
             console.log(err);
         } else {
@@ -27,12 +27,12 @@ exports.author_save = function (req, res) {
     req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
 
     // Get Errors
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors){
         res.render('authors/new', {title: 'Add Author', errors: errors});
     } else {
-        var first_name = req.sanitize(req.body.first_name).trim(),
+        let first_name = req.sanitize(req.body.first_name).trim(),
             last_name = req.sanitize(req.body.last_name).trim(),
             bio = req.sanitize(req.body.bio).trim(),
             newAuthor = {first_name: first_name, last_name: last_name, bio: bio};
@@ -73,7 +73,7 @@ exports.author_update = function (req, res) {
     req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
 
     // Get Errors
-    var errors = req.validationErrors();
+    let errors = req.validationErrors();
 
     if(errors){
         Author.findById(req.params.id).
@@ -81,7 +81,7 @@ exports.author_update = function (req, res) {
             res.render('authors/edit', {title: 'Edit Author', author: foundAuthor, errors: errors});
         })
     } else {
-        var first_name = req.sanitize(req.body.first_name).trim(),
+        let first_name = req.sanitize(req.body.first_name).trim(),
             last_name = req.sanitize(req.body.last_name).trim(),
             bio = req.sanitize(req.body.bio).trim();
         Author.findByIdAndUpdate(req.params.id, {$set: {first_name: first_name, last_name: last_name, bio: bio}}, function (err, updatedAuthor) {
@@ -96,13 +96,13 @@ exports.author_update = function (req, res) {
 };
 
 exports.author_delete = function (req, res) {
-        Author.findByIdAndRemove(req.params.id, function (err) {
-            if (err) {
-                console.log(err);
-                res.redirect('/authors');
-            } else {
-                req.flash('success', 'Author has been successfully removed from the database!');
-                res.redirect('/authors');
-            }
-        })
+    Author.findByIdAndRemove(req.params.id, function (err) {
+        if (err) {
+            console.log(err);
+            res.redirect('/authors');
+        } else {
+            req.flash('success', 'Author has been successfully removed from the database!');
+            res.redirect('/authors');
+        }
+    })
 };
