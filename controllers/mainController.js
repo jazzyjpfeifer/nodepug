@@ -2,8 +2,6 @@ const Category = require('../models/category'),
       Post = require('../models/posts'),
       passport = require('passport');
 
-const nodemailer = require('nodemailer');
-
 const config = require('../config/config');
 
 const async = require('async');
