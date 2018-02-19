@@ -53,7 +53,7 @@ exports.post_save = function (req, res) {
     req.checkBody('category').notEmpty().withMessage('Category cannot by empty');
     req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
 
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     if(errors) {
         async.parallel({
@@ -81,7 +81,7 @@ exports.post_save = function (req, res) {
         })
 
     } else {
-        let title = req.sanitize(req.body.title).trim(),
+        var title = req.sanitize(req.body.title).trim(),
             summary = req.sanitize(req.body.summary).trim(),
             category = req.sanitize(req.body.category).trim(),
             author = req.sanitize(req.body.author).trim(),
@@ -161,7 +161,7 @@ exports.post_update = function (req, res) {
     req.checkBody('author').notEmpty().withMessage('Author cannot by empty');
     req.checkBody('date_posted').notEmpty().withMessage('Date posted cannot by blank');
 
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     if(errors){
         async.parallel({
@@ -192,7 +192,7 @@ exports.post_update = function (req, res) {
             }
         })
     } else {
-        let title = req.sanitize(req.body.title).trim(),
+        var title = req.sanitize(req.body.title).trim(),
             author = req.sanitize(req.body.author).trim(),
             category = req.sanitize(req.body.category).trim(),
             summary = req.sanitize(req.body.summary).trim(),

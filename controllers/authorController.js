@@ -27,12 +27,12 @@ exports.author_save = function (req, res) {
     req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
 
     // Get Errors
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     if(errors){
         res.render('authors/new', {title: 'Add Author', errors: errors});
     } else {
-        let first_name = req.sanitize(req.body.first_name).trim(),
+        var first_name = req.sanitize(req.body.first_name).trim(),
             last_name = req.sanitize(req.body.last_name).trim(),
             bio = req.sanitize(req.body.bio).trim(),
             newAuthor = {first_name: first_name, last_name: last_name, bio: bio};
@@ -73,7 +73,7 @@ exports.author_update = function (req, res) {
     req.checkBody('bio').notEmpty().withMessage('Bio cannot by empty');
 
     // Get Errors
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     if(errors){
         Author.findById(req.params.id).
@@ -81,7 +81,7 @@ exports.author_update = function (req, res) {
             res.render('authors/edit', {title: 'Edit Author', author: foundAuthor, errors: errors});
         })
     } else {
-        let first_name = req.sanitize(req.body.first_name).trim(),
+        var first_name = req.sanitize(req.body.first_name).trim(),
             last_name = req.sanitize(req.body.last_name).trim(),
             bio = req.sanitize(req.body.bio).trim();
         Author.findByIdAndUpdate(req.params.id, {$set: {first_name: first_name, last_name: last_name, bio: bio}}, function (err, updatedAuthor) {

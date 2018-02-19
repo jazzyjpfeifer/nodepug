@@ -28,7 +28,7 @@ exports.content_types_save = function (req, res) {
     req.checkBody('sequence').notEmpty().withMessage('Sequence cannot by empty')
         .isInt().withMessage('Sequence must be a number');
 
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     //Check for errors and re-render page
     if(errors) {
@@ -41,7 +41,7 @@ exports.content_types_save = function (req, res) {
         })
 
     } else {
-        let desc = req.sanitize(req.body.description).trim(),
+        var desc = req.sanitize(req.body.description).trim(),
             seq = req.sanitize(req.body.sequence).trim(),
             newContentType = {description: desc, sequence: seq};
         Content_Type.create(newContentType, function (err, results) {
@@ -69,14 +69,14 @@ exports.content_types_update = function (req, res) {
         .isInt().withMessage('Sequence must be a number');
 
     // Get Errors
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
 
     if(errors){
         Content_Type.findById(req.params.id, function (err, foundContentTypes) {
             res.render('content_types/edit', {title: 'Edit Category Types', content_type:foundContentTypes, errors: errors});
         })
     } else {
-        let desc = req.body.description,
+        var desc = req.body.description,
             seq = req.body.sequence;
         Content_Type.findByIdAndUpdate(req.params.id, {$set: {description: desc, sequence: seq}}, function (err, updatedContentType) {
             if (err) {
