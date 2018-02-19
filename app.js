@@ -3,7 +3,6 @@ const express = require('express'),
       bodyParser = require('body-parser'),
       mongoose = require('mongoose'),
       expressSanitizer = require('express-sanitizer'),
-      expressValidator = require('express-validator'),
       cookieParser = require("cookie-parser"),
       session = require('express-session'),
       flash = require('connect-flash'),
@@ -53,7 +52,6 @@ app.set('view engine', 'pug');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet());
-app.use(expressValidator());
 app.use(expressSanitizer());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'semantic')));
