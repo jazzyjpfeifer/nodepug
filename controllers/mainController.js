@@ -53,7 +53,7 @@ exports.contact = function (req, res) {
 
 exports.contact_send = function (req, res) {
 
-    let transporter = nodemailer.createTransport({
+    var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
             user: config.emailUser,
@@ -61,7 +61,7 @@ exports.contact_send = function (req, res) {
         }
     });
 
-    let name = req.sanitize(req.body.name).trim(),
+    var name = req.sanitize(req.body.name).trim(),
         email = req.sanitize(req.body.email).trim(),
         message = req.sanitize(req.body.message).trim(),
         mailOptions = {
