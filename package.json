@@ -19,7 +19,7 @@
     "express-messages": "^1.0.1",
     "express-sanitizer": "^1.0.3",
     "express-session": "^1.15.6",
-    "express-validator": "^5.0.0",
+    "express-validator": "^4.3.0",
     "helmet": "^3.11.0",
     "method-override": "^2.3.10",
     "moment": "^2.20.1",
