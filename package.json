@@ -3,7 +3,8 @@
   "description": "a really cool app",
   "version": "1.0.1",
   "engines": {
-    "node": "8.9.4"
+    "node": "*",
+    "npm": "*"
   },
   "scripts": {
     "start": "node ./bin/www"
