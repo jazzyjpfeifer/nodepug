@@ -15,7 +15,7 @@ exports.post_detail_new = function (req, res) {
     async.parallel({
         post: function (callback) {
             Post.
-            findById(req.params.id).
+            findById(req.params.postId).
             exec(callback)
         },
         content_types: function (callback) {
@@ -25,7 +25,7 @@ exports.post_detail_new = function (req, res) {
         },
         count: function (callback) {
             Post.aggregate([
-                {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
+                {$match: {_id: mongoose.Types.ObjectId(req.params.postId)}},
                 {$unwind: '$post_details'},
                 {$group: {
                         _id: '$_id', count: { $sum: 1}
@@ -70,7 +70,7 @@ exports.post_detail_save = function (req, res) {
         }
     }).single('file_name');
     //Get Post related to Post_Details
-    Post.findById(req.params.id, function (err, post) {
+    Post.findById(req.params.postId, function (err, post) {
         if (err) {
             console.log(err);
         } else {
@@ -126,10 +126,15 @@ exports.post_detail_save = function (req, res) {
 
 exports.post_detail_edit = function (req, res) {
     async.parallel({
-            post_detail: function (callback) {
+            post: function (callback) {
                 Post.
+                    findById(req.params.postId).
+                    exec(callback)
+            },
+            post_detail: function (callback) {
+                Post_Detail.
                 findById(req.params.id).
-                populate('post_detail').
+                populate('content_type').
                 exec(callback)
             },
             content_types: function (callback) {
@@ -143,57 +148,48 @@ exports.post_detail_edit = function (req, res) {
                 console.log(err);
             } else {
                 res.render('post_details/edit', {title: 'Edit Post Detail', post: results.post, post_detail: results.post_detail, content_types: results.content_types});
-                console.log(results.post)
             }
         })
 };
 
-/*
-exports.post_detail_new = function (req, res) {
+exports.post_detail_update = function (req, res) {
+
     async.parallel({
         post: function (callback) {
-            Post.
-            findById(req.params.id).
-            exec(callback)
-        },
-        content_types: function (callback) {
-            Content_Type.
-            find({}).
-            exec(callback)
-        },
-        count: function (callback) {
-            Post.aggregate([
-                {$match: {_id: mongoose.Types.ObjectId(req.params.id)}},
-                {$unwind: '$post_details'},
-                {$group: {
-                        _id: '$_id', count: { $sum: 1}
-                    }}
-            ]).
-            exec(callback)
+            Post.findById(req.params.postId).populate('author').populate({
+                path: 'post_details',
+                model: 'Post_Detail',
+                populate: {
+                    path: 'content_type',
+                    model: 'Content_Type'
+                }
+            }).exec(callback)
         }
-    }, function (err, results) {
-        if(err) {
-            console.log(err);
-        }
-        else {
-            res.render('post_details/new', {title: 'Add Post Detail', post: results.post, content_types: results.content_types, count: results.count});
-            console.log(JSON.stringify(results.count));
-        }
-    })
-};
- */
+    },
+        function (err, results) {
+            if (err) {
+                console.log(err);
+            } else {
+                let content_type = req.sanitize(req.body.content_type).trim(),
+                    content = req.sanitize(req.body.content).trim(),
+                    sequence = req.sanitize(req.body.sequence).trim();
+                Post_Detail.findByIdAndUpdate(req.params.id, {
+                    $set: {
+                        content_type: content_type,
+                        content: content,
+                        sequence: sequence
+                    }
+                }, function (err, updatedPost) {
+                    if (err) {
+                        console.log(err)
+                    } else {
+                        res.redirect('/posts/' + results.post._id + '/show');
+                    }
 
-exports.post_detail_update = function (req, res) {
-    const post_id = req.body.post_id;
-    Post_Detail.findByIdAndUpdate(req.params.id, req.body.post_detail, function(err, updatedPost_Detail) {
-        if(err) {
-            console.log(err);
+                })
+            }
         }
-        else {
-            console.log(updatedPost_Detail);
-            res.redirect('/posts/' + post_id + '/show');
-        }
-    })
+    )
 };
 
 exports.post_detail_delete = function (req, res) {

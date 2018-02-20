@@ -97,7 +97,7 @@ app.use('/categories', categories);
 app.use('/content_types', content_types);
 app.use('/posts', posts);
 app.use('/search', search);
-app.use('/posts/:id/show/post_details', post_details);
+app.use('/posts/:postId/show/post_details', post_details);
 app.use('/register', register);
 app.use('/roles', roles);
 
