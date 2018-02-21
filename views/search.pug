@@ -5,10 +5,12 @@ html
 		include includes/header
 		div(class='ui grid container content')
 			div(class='eleven side column')
-				h2(class='ui header') Search Results:
-				div(class='ui list')
-				each s in search
-					div(class='item') #{s.title}
+				h2(class='ui header') Search Results: #{count}
+				div(class='ui large relaxed animated selection divided list')
+					each s in search
+						div(class='item')
+							div(class='content')
+								a(class='header' href='/post/' + s._id) #{s.title}
 		include ./includes/scripts
 		include ./includes/footer
 

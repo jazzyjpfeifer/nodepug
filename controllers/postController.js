@@ -3,6 +3,8 @@ const Post = require('../models/posts'),
     Author = require('../models/author'),
     Content_Type = require('../models/content_type');
 
+const moment = require('moment');
+
 const async = require('async');
 
 exports.post_list = function (req, res) {
@@ -196,8 +198,21 @@ exports.post_update = function (req, res) {
             author = req.sanitize(req.body.author).trim(),
             category = req.sanitize(req.body.category).trim(),
             summary = req.sanitize(req.body.summary).trim(),
-            date_posted = req.sanitize(req.body.date_posted).trim();
-        Post.findByIdAndUpdate(req.params.id, {$set: {title:title, author: author, category:category, summary:summary, date_posted:date_posted }}, function (err, updatedPost) {
+            date_posted = req.sanitize(req.body.date_posted).trim(),
+            year_posted = moment(new Date(date_posted)).format('YYYY'),
+            month_posted = moment(new Date(date_posted)).format('MMMM');
+
+        Post.findByIdAndUpdate(req.params.id, {$set:
+                {
+                    title:title,
+                    author: author,
+                    category:category,
+                    summary:summary,
+                    date_posted:date_posted,
+                    year_posted: year_posted,
+                    month_posted: month_posted
+                }},
+            function (err, updatedPost) {
             if (err) {
                 console.log(err);
             } else {

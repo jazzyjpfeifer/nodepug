@@ -23,13 +23,12 @@ html
       div(class='four wide right floated column')
         h4(class='ui header') Archives
         div(class='ui list')
-          each a in archives
-            a(class='item') #{a.year}
-        div(class='ui hidden divider')
-          h4(class='ui header') Categories
-          div(class='ui list')
-            each category in categories
-              a(class='item') #{category.description}
+          each year in archives
+            a(class='item' href='/search/archives/' + year) #{year}
+        h4(class='ui header') Categories
+        div(class='ui list')
+          each category in categories
+            a(class='item' href='/search/category/' + category._id ) #{category.description}
     div(class='push')
     include ./includes/scripts
     include ./includes/footer

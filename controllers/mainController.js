@@ -15,7 +15,7 @@ exports.index = function (req, res) {
         categories: function (callback) {
             Category.
             find({}).
-            select('description -_id').
+            select('description').
             sort({sequence: 1}).
             exec(callback);
         },
@@ -27,12 +27,9 @@ exports.index = function (req, res) {
             exec(callback);
         },
         archives: function (callback) {
-            Post.aggregate([
-                { "$group": {
-                        _id: { year: { $year: '$date_posted'}, month: {$month: '$date_posted'}},
-                        year: { '$addToSet': { $year: '$date_posted'}},
-                    }}
-            ]).
+            Post.
+            find({}).
+            distinct('year_posted').
             exec(callback);
         },
     }, function (err, results) {
@@ -70,7 +67,7 @@ exports.contact_send = function (req, res) {
             from: email,
             to: 'bisteps360@gmail.com',
             subject: 'From: ' + name,
-            html: '<b>' + message + '</b>'
+            html: '<p>' + message + '</p>'
         };
 
     transporter.sendMail(mailOptions, function (err, info) {
