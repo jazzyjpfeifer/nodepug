@@ -13,10 +13,6 @@ html
         each post in posts
           h2(class='ui large header') #{post.title}
           span #{post.date_posted_formatted}
-          |
-          | by
-          |
-          a(href='') #{post.author.first_name} #{post.author.last_name}
           p(class='blog-summary') #{post.summary}
           a(href='/post/' + post._id) Read More
           div(class='ui divider')
