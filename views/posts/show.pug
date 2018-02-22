@@ -21,10 +21,10 @@ html
 						each post_detail in post.post_details
 							tr
 								td #{post_detail.sequence}
-								if post_detail.content.length < 90
+								if post_detail.content.length < 80
 									td #{post_detail.content}
 								else
-									td #{post_detail.content.substr(0, 90) + '...'}
+									td #{post_detail.content.substr(0, 80) + '...'}
 								td #{post_detail.content_type.description}
 								td
 									form(class='ui form delete-button' action='/posts/' + post._id + '/show/post_details/' + post_detail._id + '?_method=DELETE' method='post')
